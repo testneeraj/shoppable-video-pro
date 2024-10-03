@@ -4,6 +4,7 @@ function svp_add_meta_boxes()
 {
     add_meta_box('svp_video_details', 'Video Section', 'svp_video_details_callback', 'shoppable_video', 'normal', 'high');
     add_meta_box('svp_cta_details', 'CTA Section', 'svp_cta_details_callback', 'shoppable_video', 'normal', 'high');
+    add_meta_box('svp_statistics_details', 'Statistics', 'svp_statistics_details_callback', 'shoppable_video', 'normal', 'high');
 }
 
 add_action('add_meta_boxes', 'svp_add_meta_boxes');
@@ -33,16 +34,6 @@ function svp_video_details_callback($post)
     }
     echo '</ul>';
     echo '</p>';
-
-    // Display views, clicks, purchases fields
-    echo '<p class="svp-field"><label for="svp_views">Views:</label>';
-    echo '<input type="number" id="svp_views" name="svp_views" value="' . esc_attr($views) . '" size="10" readonly/></p>';
-
-    echo '<p class="svp-field"><label for="svp_clicks">Clicks:</label>';
-    echo '<input type="number" id="svp_clicks" name="svp_clicks" value="' . esc_attr($clicks) . '" size="10" readonly /></p>';
-
-    echo '<p class="svp-field"><label for="svp_purchases">Purchases:</label>';
-    echo '<input type="number" id="svp_purchases" name="svp_purchases" value="' . esc_attr($purchases) . '" size="10" readonly /></p>';
 
     echo '</div>'; // End of custom class wrapper
 }
@@ -81,6 +72,23 @@ function svp_cta_details_callback($post)
     echo '</ul>';
     echo '<button type="button" id="add_cta_button" class="button">Add CTA</button>';
     echo '</div>';
+}
+
+function svp_statistics_details_callback($post)
+{
+    wp_nonce_field(basename(__FILE__), 'svp_nonce');
+
+    // Fetch existing meta values
+    $views = get_post_meta($post->ID, '_svp_views', true);
+    $clicks = get_post_meta($post->ID, '_svp_clicks', true);
+
+    echo '<div class="svp-meta-box-container">'; // Start of custom class wrapper
+    echo '<p class="svp-field"><label for="svp_views">Views:</label>';
+    echo '<input type="number" id="svp_views" name="svp_views" value="' . esc_attr($views) . '" size="10" readonly/></p>';
+    echo '<p class="svp-field"><label for="svp_clicks">Clicks:</label>';
+    echo '<input type="number" id="svp_clicks" name="svp_clicks" value="' . esc_attr($clicks) . '" size="10" readonly /></p>';
+
+    echo '</div>'; // End of custom class wrapper
 }
 
 

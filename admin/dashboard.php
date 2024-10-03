@@ -65,11 +65,5 @@ function svp_render_dashboard_page() {
     echo '<p>Total Clicks</p>';
     echo '</div>';
 
-    echo '<div class="svp-stat-box">';
-    echo '<h2>' . esc_html($total_purchases) . '</h2>';
-    echo '<p>Total Purchases</p>';
-    echo '</div>';
-    echo '</div>';
-
     echo '</div>';
 }
