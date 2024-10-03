@@ -26,91 +26,45 @@
         content: '';
     }
 </style>
-
+<?php
+$posts = get_posts([
+    'post_type' => 'shoppable_video',
+    'post_status' => 'publish',
+    'numberposts' => -1
+]);
+foreach ($posts as $post) {
+    $videos = get_post_meta($post->ID, '_svp_uploaded_videos', true);
+    $cta_type = get_post_meta($post->ID, '_svp_cta_type', true);
+    if($cta_type = "yes"){
+        $cta_url = get_post_meta($post->ID, '_svp_woocommerce_product', true);
+    }else{
+        $cta_url = get_post_meta($post->ID, '_svp_button_link', true);
+    }
+}
+?>
+<?php if(isset($videos["0"])): ?>
 <!-- Start: Fixed Video Bubble -->
 <section class="fixed-video-bubble">
     <div class="video-bubble__wrapper">
         <div class="video-bubble__wrapper-box" data-bs-toggle="modal" data-bs-target="#videoModal">
             <div class="video-bubble__wrapper-video">
                 <!-- Poster will be the image which will be seen when video won't work -->
-                <video poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
+
+                <video poster="<?php echo $videos["0"] ?>"
                        autoplay loop muted playsinline>
-                    <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+                    <source src="<?php echo $videos["0"] ?>"
                             type="video/mp4" playsinline>
                 </video>
+
             </div>
         </div>
     </div>
 </section>
 <!-- End: Fixed Video Bubble -->
+<?php endif; ?>
 
 <!-- Story Slider Modal -->
 <div class="modal fade video-bubble__modal" id="videoModal" aria-labelledby="videoModalLabel" aria-hidden="true">
-    <!-- Start: Fixed Comment section -->
-    <section class="comments">
-        <div class="comments__wrapper">
-            <div class="comments__wrapper-box">
-                <div class="comments__wrapper-items">
-                    <div class="comments__wrapper-item">
-                        <div class="comments__wrapper-item-avatar">
-                            <img src="https://placehold.co/50x50" alt="User Img">
-                        </div>
-                        <div class="comments__wrapper-item-text">
-                            <div class="name">User name</div>
-                            <div class="message">This is a test comment</div>
-                        </div>
-                    </div>
-
-                    <div class="comments__wrapper-item">
-                        <div class="comments__wrapper-item-avatar">
-                            <img src="https://placehold.co/50x50" alt="User Img">
-                        </div>
-                        <div class="comments__wrapper-item-text">
-                            <div class="name">User name</div>
-                            <div class="message">This is a test comment This is a test comment This is a test comment
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="comments__wrapper-item">
-                        <div class="comments__wrapper-item-avatar">
-                            <img src="https://placehold.co/50x50" alt="User Img">
-                        </div>
-                        <div class="comments__wrapper-item-text">
-                            <div class="name">User name</div>
-                            <div class="message">This is a test comment</div>
-                        </div>
-                    </div>
-
-                    <div class="comments__wrapper-item">
-                        <div class="comments__wrapper-item-avatar">
-                            <img src="https://placehold.co/50x50" alt="User Img">
-                        </div>
-                        <div class="comments__wrapper-item-text">
-                            <div class="name">User name</div>
-                            <div class="message">This is a test comment</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comments__wrapper-input">
-                <input type="text" tabindex="1" name="userComment" id="userComment" placeholder="Type your message...">
-
-                <div class="mention-link">
-                    <i class="fa-solid fa-at"></i>
-                    <!-- <span>@</span> -->
-                </div>
-
-                <div class="enter-link">
-                    <i class="fa-solid fa-arrow-up"></i>
-                    <!-- <svg width="44" height="44" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="22" cy="22" r="12" fill="#000"></circle><path d="M22.848 26.8v-7.552L25.6 22a.849.849 0 001.2-1.2l-4.2-4.2a.849.849 0 00-1.2 0l-4.2 4.2a.849.849 0 001.2 1.2l2.752-2.752V26.8a.848.848 0 101.696 0z" fill="#fff"></path></svg> -->
-                </div>
-            </div>
-        </div>
-    </section>
-    <!-- End: Fixed Comment section -->
-
     <!-- Start: Slider -->
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -123,69 +77,35 @@
                 <div class="story">
                     <div class="story__slider swiper">
                         <div class="story__wrapper swiper-wrapper">
-                            <!-- Slide 1 -->
-                            <div class="story__slide swiper-slide">
-                                <img src="https://picsum.photos/450/800"/>
-                            </div>
+                            <?php foreach ($videos as $video): ?>
+                                <div class="story__slide swiper-slide">
+                                    <video poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
+                                           autoplay muted>
+                                        <source src="<?php echo $video ?>"
+                                                type="video/mp4">
+                                    </video>
 
-                            <!-- Slide 2 -->
-                            <div class="story__slide swiper-slide">
-                                <video poster="https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg"
-                                       autoplay muted>
-                                    <source src="https://storage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
-                                            type="video/mp4">
-                                </video>
-                            </div>
-
-                            <!-- Slide 3 -->
-                            <div class="story__slide swiper-slide">
-                                <img src="https://picsum.photos/450/810"/>
-                            </div>
+                                    <div class="modal-cta">
+                                        <!-- If buttons are on right side -->
+                                        <div class="cta cta--bottom">
+                                            <div class="btn-wrapper">
+                                                <a href="<?php echo $cta_url ?>" title="Like" tabindex="2">
+                                                    <i class="fa-regular fa-heart"></i>
+                                                </a>
+                                                <a href="<?php echo $cta_url ?>" title="Share" tabindex="2">
+                                                    <i class="fa-brands fa-whatsapp"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-
                         <!-- Navigation Arrows -->
                         <div class="story__next swiper-button-next"></div>
                         <div class="story__prev swiper-button-prev"></div>
-
                         <!-- Progress pagination -->
                         <div class="story__pagination swiper-pagination"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-cta">
-                <!-- If buttons are on left side -->
-                <div class="cta cta--left">
-                    <div class="btn-wrapper">
-                        <a href="#" title="Like">
-                            <i class="fa-regular fa-heart"></i>
-                        </a>
-                        <a href="#" title="Share">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- If buttons are on bottom -->
-                <div class="cta cta--bottom">
-                    <div class="btn-wrapper">
-                        <a href="#" title="Like">
-                            <i class="fa-regular fa-heart"></i>
-                        </a>
-                        <a href="#" title="Share">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- If buttons are on right side -->
-                <div class="cta cta--right">
-                    <div class="btn-wrapper">
-                        <a href="#" title="Like">
-                            <i class="fa-regular fa-heart"></i>
-                        </a>
-                        <a href="#" title="Share">
-                            <i class="fa-brands fa-whatsapp"></i>
-                        </a>
                     </div>
                 </div>
             </div>
