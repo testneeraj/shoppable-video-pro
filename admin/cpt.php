@@ -27,7 +27,7 @@ function svp_register_shoppable_video_cpt()
         'capability_type' => 'post',
         'has_archive' => true,
         'hierarchical' => false,
-        'supports' => array('title', 'editor', 'excerpt', 'thumbnail', 'custom-fields', 'comments'),
+        'supports' => array('title', 'thumbnail', 'custom-fields', 'comments'),
     );
 
     register_post_type('shoppable_video', $args);

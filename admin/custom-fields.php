@@ -2,7 +2,8 @@
 
 function svp_add_meta_boxes()
 {
-    add_meta_box('svp_video_details', 'Video Details', 'svp_video_details_callback', 'shoppable_video', 'normal', 'high');
+    add_meta_box('svp_video_details', 'Video Section', 'svp_video_details_callback', 'shoppable_video', 'normal', 'high');
+    add_meta_box('svp_cta_details', 'CTA Section', 'svp_cta_details_callback', 'shoppable_video', 'normal', 'high');
 }
 
 add_action('add_meta_boxes', 'svp_add_meta_boxes');
@@ -16,41 +17,9 @@ function svp_video_details_callback($post)
     $clicks = get_post_meta($post->ID, '_svp_clicks', true);
     $purchases = get_post_meta($post->ID, '_svp_purchases', true);
     $videos = get_post_meta($post->ID, '_svp_uploaded_videos', true);
-    $cta_type = get_post_meta($post->ID, '_svp_cta_type', true);
-    $button_text = get_post_meta($post->ID, '_svp_button_text', true);
-    $button_link = get_post_meta($post->ID, '_svp_button_link', true);
-    $selected_product = get_post_meta($post->ID, '_svp_woocommerce_product', true);
+    $ctas = get_post_meta($post->ID, '_svp_ctas', true);
 
     echo '<div class="svp-meta-box-container">'; // Start of custom class wrapper
-
-    // CTA Type field
-    echo '<p class="svp-field"><label for="svp_cta_type">CTA Type:</label>';
-    echo '<input type="checkbox" id="svp_cta_type" name="svp_cta_type" value="yes" ' . checked($cta_type, 'yes', false) . ' />';
-    echo ' Use WooCommerce Product</p>';
-
-    // Button Text and Button Link fields (shown if CTA Type is "no")
-    echo '<div id="cta-button-fields" class="svp-field" ' . ($cta_type === 'yes' ? 'style="display:none;"' : '') . '>';
-    echo '<p><label for="svp_button_text">Button Text:</label>';
-    echo '<input type="text" id="svp_button_text" name="svp_button_text" value="' . esc_attr($button_text) . '" size="25" /></p>';
-
-    echo '<p><label for="svp_button_link">Button Link:</label>';
-    echo '<input type="url" id="svp_button_link" name="svp_button_link" value="' . esc_attr($button_link) . '" size="25" /></p>';
-    echo '</div>';
-
-    // WooCommerce Product dropdown (shown if CTA Type is "yes")
-    if (class_exists('WooCommerce')) {
-        $products = wc_get_products(array('limit' => -1));
-        echo '<div id="cta-product-field" class="svp-field" ' . ($cta_type !== 'yes' ? 'style="display:none;"' : '') . '>';
-        echo '<p><label for="svp_woocommerce_product">Select Product:</label>';
-        echo '<select id="svp_woocommerce_product" name="svp_woocommerce_product">';
-        foreach ($products as $product) {
-            $product_url = get_permalink($product->get_id());
-            echo '<option value="' . esc_url($product_url) . '" ' . selected($selected_product, esc_url($product_url), false) . '>' . esc_html($product->get_name()) . '</option>';
-        }
-        echo '</select></p>';
-        echo '</div>';
-    }
-
     // Video upload field
     echo '<p class="svp-field"><label for="svp_uploaded_videos">Upload Videos:</label>';
     echo '<input type="button" class="button" id="svp_upload_button" value="Upload Video" />';
@@ -78,48 +47,82 @@ function svp_video_details_callback($post)
     echo '</div>'; // End of custom class wrapper
 }
 
+function svp_cta_details_callback($post)
+{
+    wp_nonce_field(basename(__FILE__), 'svp_cta_nonce');
+    $ctas = get_post_meta($post->ID, '_svp_ctas', true);
+
+    echo '<div class="svp-meta-box-container">';
+    echo '<ul id="svp_cta_list">';
+    if (!empty($ctas)) {
+        foreach ($ctas as $index => $cta) {
+            echo '<li>';
+            echo '<select name="svp_ctas[' . $index . '][icon]" class="cta-icon-select">';
+            echo '<option value="">Select Icon</option>';
+            echo '<option value="fa-heart" ' . selected($cta['icon'], 'fa-heart', false) . '>Like</option>';
+            echo '<option value="fa-whatsapp" ' . selected($cta['icon'], 'fa-whatsapp', false) . '>Whatsapp</option>';
+            echo '<option value="fa-facebook" ' . selected($cta['icon'], 'fa-facebook', false) . '>Facebook</option>';
+            echo '<option value="fa-twitter" ' . selected($cta['icon'], 'fa-twitter', false) . '>Twitter</option>';
+            echo '<option value="fa-instagram" ' . selected($cta['icon'], 'fa-instagram', false) . '>Instagram</option>';
+            echo '<option value="fa-link" ' . selected($cta['icon'], 'fa-link', false) . '>Link</option>';
+            echo '</select>';
+            echo '<select name="svp_ctas[' . $index . '][position]" class="cta-icon-select">';
+            echo '<option value="">Select Position</option>';
+            echo '<option value="cta--left" ' . selected($cta['position'], 'cta--left', false) . '>Left</option>';
+            echo '<option value="cta--right" ' . selected($cta['position'], 'cta--right', false) . '>Right</option>';
+            echo '<option value="cta--bottom" ' . selected($cta['position'], 'cta--bottom', false) . '>Bottom</option>';
+            echo '</select>';
+            echo '<input type="url" name="svp_ctas[' . $index . '][url]" placeholder="URL" value="' . esc_url($cta['url']) . '" />';
+            echo '<p><label><input type="checkbox" name="svp_ctas[' . $index . '][new_tab]" ' . checked($cta['new_tab'], 'on', false) . ' /> Open in New Tab</label></p>';
+            echo '<button class="remove-cta button">Remove</button>';
+            echo '</li>';
+        }
+    }
+    echo '</ul>';
+    echo '<button type="button" id="add_cta_button" class="button">Add CTA</button>';
+    echo '</div>';
+}
+
+
 function svp_save_meta_boxes($post_id)
 {
     // Verify nonce
     if (!isset($_POST['svp_nonce']) || !wp_verify_nonce($_POST['svp_nonce'], basename(__FILE__))) {
         return;
     }
-
+    // Verify nonce for CTA details
+    if (!isset($_POST['svp_cta_nonce']) || !wp_verify_nonce($_POST['svp_cta_nonce'], basename(__FILE__))) {
+        return;
+    }
     // Check for autosave and permissions
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
     if (!current_user_can('edit_post', $post_id)) return;
+
+    // Save the CTAs
+    if (isset($_POST['svp_ctas'])) {
+        $ctas = array_map(function ($cta) {
+            return [
+                'icon' => sanitize_text_field($cta['icon']),
+                'url' => esc_url_raw($cta['url']),
+                'position' => sanitize_text_field($cta['position']),
+                'new_tab' => isset($cta['new_tab']) ? 'on' : 'off',
+            ];
+        }, $_POST['svp_ctas']);
+        update_post_meta($post_id, '_svp_ctas', $ctas);
+    } else {
+        delete_post_meta($post_id, '_svp_ctas');
+    }
 
     // Save views, clicks, purchases
     if (isset($_POST['svp_views'])) {
         update_post_meta($post_id, '_svp_views', sanitize_text_field($_POST['svp_views']));
     }
-
     if (isset($_POST['svp_clicks'])) {
         update_post_meta($post_id, '_svp_clicks', sanitize_text_field($_POST['svp_clicks']));
     }
-
     if (isset($_POST['svp_purchases'])) {
         update_post_meta($post_id, '_svp_purchases', sanitize_text_field($_POST['svp_purchases']));
     }
-
-    // Save CTA Type
-    $cta_type = isset($_POST['svp_cta_type']) ? 'yes' : 'no';
-    update_post_meta($post_id, '_svp_cta_type', $cta_type);
-
-    // Save Button Text and Button Link if CTA Type is "no"
-    if ($cta_type === 'no') {
-        update_post_meta($post_id, '_svp_button_text', sanitize_text_field($_POST['svp_button_text']));
-        update_post_meta($post_id, '_svp_button_link', esc_url_raw($_POST['svp_button_link']));
-        delete_post_meta($post_id, '_svp_woocommerce_product'); // Remove product if button is used
-    } else {
-        // Save WooCommerce product URL if CTA Type is "yes"
-        if (isset($_POST['svp_woocommerce_product'])) {
-            update_post_meta($post_id, '_svp_woocommerce_product', esc_url_raw($_POST['svp_woocommerce_product']));
-            delete_post_meta($post_id, '_svp_button_text');
-            delete_post_meta($post_id, '_svp_button_link');
-        }
-    }
-
     // Save the uploaded videos
     if (isset($_POST['svp_uploaded_videos'])) {
         $videos = array_map('esc_url_raw', $_POST['svp_uploaded_videos']);
@@ -130,6 +133,7 @@ function svp_save_meta_boxes($post_id)
 }
 
 add_action('save_post', 'svp_save_meta_boxes');
+
 
 // Add CSS for custom fields
 function svp_admin_styles()
@@ -184,6 +188,9 @@ function svp_admin_styles()
         .svp-meta-box-container ul li {
             margin-bottom: 10px;
         }
+        .svp-meta-box-container ul li input {
+            margin-right: 10px;
+        }
         .svp-meta-box-container .remove-video {
             background-color: #ff5c5c;
             border-color: #ff5c5c;
@@ -194,6 +201,9 @@ function svp_admin_styles()
         .svp-meta-box-container .remove-video:hover {
             background-color: #cc4a4a;
         }
+        .svp-meta-box-container input[type="checkbox"] {
+    margin-right: 5px;
+}
     </style>
     ';
 }
@@ -205,6 +215,31 @@ function svp_admin_scripts()
     ?>
     <script type="text/javascript">
         jQuery(document).ready(function ($) {
+            var ctaIconOptions = [
+                {class: 'fa-heart', label: 'Like'},
+                {class: 'fa-whatsapp', label: 'Whatsapp'},
+                {class: 'fa-facebook', label: 'Facebook'},
+                {class: 'fa-twitter', label: 'Twitter'},
+                {class: 'fa-instagram', label: 'Instagram'},
+                {class: 'fa-link', label: 'Link'},
+            ];
+            var ctaPositionOptions = [
+                {class: 'cta--left', label: 'Left'},
+                {class: 'cta--right', label: 'Right'},
+                {class: 'cta--bottom', label: 'Bottom'},
+            ];
+
+            function updateIconPreview(selectElement) {
+                var selectedClass = $(selectElement).val();
+                var iconPreview = $(selectElement).siblings('.cta-icon-preview');
+
+                if (selectedClass) {
+                    iconPreview.attr('class', 'cta-icon-preview fa ' + selectedClass);
+                } else {
+                    iconPreview.attr('class', 'cta-icon-preview');
+                }
+            }
+
             var mediaUploader;
 
             $('#svp_upload_button').click(function (e) {
@@ -240,15 +275,51 @@ function svp_admin_scripts()
                 $(this).closest('li').remove();
             });
 
-            $('#svp_cta_type').on('change', function () {
-                if ($(this).is(':checked')) {
-                    $('#cta-button-fields').hide();
-                    $('#cta-product-field').show();
-                } else {
-                    $('#cta-button-fields').show();
-                    $('#cta-product-field').hide();
-                }
-            }).trigger('change');
+            // Add CTA logic
+            $('#add_cta_button').on('click', function () {
+                var ctaCount = $('#svp_cta_list li').length;
+                var newCtaHtml = '<li>' +
+                    '<select name="svp_ctas[' + ctaCount + '][icon]" class="cta-icon-select">' +
+                    '<option value="">Select Icon</option>';
+
+                ctaIconOptions.forEach(function (option) {
+                    newCtaHtml += '<option value="' + option.class + '">' + option.label + '</option>';
+                });
+
+                newCtaHtml += '</select>' +
+                    '<span class="cta-icon-preview"></span>';
+                newCtaHtml += '<select name="svp_ctas[' + ctaCount + '][position]" class="cta-icon-select">' +
+                    '<option value="">Select Position</option>';
+
+                ctaPositionOptions.forEach(function (option) {
+                    newCtaHtml += '<option value="' + option.class + '">' + option.label + '</option>';
+                });
+
+                newCtaHtml += '</select>' +
+                    '<input type="url" name="svp_ctas[' + ctaCount + '][url]" placeholder="URL" />'+
+                    '<p><label><input type="checkbox" name="svp_ctas[' + ctaCount + '][new_tab]" /> Open in New Tab</label></p>' +
+                    '<button class="remove-cta button">Remove</button>' +
+                    '</li>';
+
+                $('#svp_cta_list').append(newCtaHtml);
+            });
+            // Remove CTA
+            $('#svp_cta_list').on('click', '.remove-cta', function (e) {
+                e.preventDefault();
+                $(this).closest('li').remove();
+            });
+
+            // Update icon preview on change
+            $('#svp_cta_list').on('change', '.cta-icon-select', function () {
+                updateIconPreview(this);
+            });
+
+            // Initial update for existing icons
+            $('.cta-icon-select').each(function () {
+                updateIconPreview(this);
+            });
+
+
         });
     </script>
     <?php

@@ -34,33 +34,25 @@ $posts = get_posts([
 ]);
 foreach ($posts as $post) {
     $videos = get_post_meta($post->ID, '_svp_uploaded_videos', true);
-    $cta_type = get_post_meta($post->ID, '_svp_cta_type', true);
-    if($cta_type = "yes"){
-        $cta_url = get_post_meta($post->ID, '_svp_woocommerce_product', true);
-    }else{
-        $cta_url = get_post_meta($post->ID, '_svp_button_link', true);
-    }
+    $svp_ctas = get_post_meta($post->ID, '_svp_ctas', true);
 }
 ?>
-<?php if(isset($videos["0"])): ?>
-<!-- Start: Fixed Video Bubble -->
-<section class="fixed-video-bubble">
-    <div class="video-bubble__wrapper">
-        <div class="video-bubble__wrapper-box" data-bs-toggle="modal" data-bs-target="#videoModal">
-            <div class="video-bubble__wrapper-video">
-                <!-- Poster will be the image which will be seen when video won't work -->
+<?php if (isset($videos["0"])): ?>
+    <section class="fixed-video-bubble">
+        <div class="video-bubble__wrapper">
+            <div class="video-bubble__wrapper-box" data-bs-toggle="modal" data-bs-target="#videoModal">
+                <div class="video-bubble__wrapper-video">
+                    <video poster="<?php echo $videos["0"] ?>"
+                           autoplay loop muted playsinline>
+                        <source src="<?php echo $videos["0"] ?>"
+                                type="video/mp4" playsinline>
+                    </video>
 
-                <video poster="<?php echo $videos["0"] ?>"
-                       autoplay loop muted playsinline>
-                    <source src="<?php echo $videos["0"] ?>"
-                            type="video/mp4" playsinline>
-                </video>
-
+                </div>
             </div>
         </div>
-    </div>
-</section>
-<!-- End: Fixed Video Bubble -->
+    </section>
+    <!-- End: Fixed Video Bubble -->
 <?php endif; ?>
 
 <!-- Story Slider Modal -->
@@ -84,20 +76,6 @@ foreach ($posts as $post) {
                                         <source src="<?php echo $video ?>"
                                                 type="video/mp4">
                                     </video>
-
-                                    <div class="modal-cta">
-                                        <!-- If buttons are on right side -->
-                                        <div class="cta cta--bottom">
-                                            <div class="btn-wrapper">
-                                                <a href="<?php echo $cta_url ?>" title="Like" tabindex="2">
-                                                    <i class="fa-regular fa-heart"></i>
-                                                </a>
-                                                <a href="<?php echo $cta_url ?>" title="Share" tabindex="2">
-                                                    <i class="fa-brands fa-whatsapp"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -106,6 +84,45 @@ foreach ($posts as $post) {
                         <div class="story__prev swiper-button-prev"></div>
                         <!-- Progress pagination -->
                         <div class="story__pagination swiper-pagination"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-cta">
+                <div class="cta cta--left">
+                    <div class="btn-wrapper">
+                        <?php foreach ($svp_ctas as $cta):
+                        if($cta["position"] == "cta--left"):
+                            ?>
+                            <a href="<?php echo $cta["url"] ?>" title=""  <?php if($cta["new_tab"] == "on"){ echo 'target="_blank"'; } ?>>
+                                <i class="fa-regular <?php echo $cta["icon"] ?>"></i>
+                            </a>
+                        <?php endif; endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- If buttons are on bottom -->
+                <div class="cta cta--bottom">
+                    <div class="btn-wrapper">
+                        <?php foreach ($svp_ctas as $cta):
+                        if($cta["position"] == "cta--bottom"):
+                        ?>
+                        <a href="<?php echo $cta["url"] ?>" title="">
+                            <i class="fa <?php echo $cta["icon"] ?>"></i>
+                        </a>
+                        <?php endif; endforeach; ?>
+                    </div>
+                </div>
+
+                <!-- If buttons are on right side -->
+                <div class="cta cta--right">
+                    <div class="btn-wrapper">
+                        <?php foreach ($svp_ctas as $cta):
+                        if($cta["position"] == "cta--right"):
+                        ?>
+                        <a href="<?php echo $cta["url"] ?>" title="">
+                            <i class="fa <?php echo $cta["icon"] ?>"></i>
+                        </a>
+                        <?php endif; endforeach; ?>
                     </div>
                 </div>
             </div>
