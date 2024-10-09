@@ -37,9 +37,5 @@ require SVP_PLUGIN_PATH . 'admin/menus.php';
 require SVP_PLUGIN_PATH . 'admin/custom-fields.php';
 
 require SVP_PLUGIN_PATH . 'admin/dashboard.php';
-if(!is_admin()) {
-    require SVP_PLUGIN_PATH . 'public/pop-up.php';
-}
 
-
-
+require SVP_PLUGIN_PATH . 'public/pop-up.php';
