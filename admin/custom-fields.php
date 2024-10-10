@@ -57,22 +57,22 @@ function svp_general_settings_callback($post)
 
     // Mute button switch
     echo '<p class="svp-field"><label for="svp_mute">Mute Button:</label>';
-    echo '<label class="switch"><input type="checkbox" id="svp_mute" name="svp_mute" value="'.$mute.'" ' . checked($mute, "on", false) . '>';
+    echo '<label class="switch"><input type="checkbox" id="svp_mute" name="svp_mute" value="' . $mute . '" ' . checked($mute, "on", false) . '>';
     echo '<span class="slider round"></span></label></p>';
 
     // Share button switch
     echo '<p class="svp-field"><label for="svp_share">Share Button:</label>';
-    echo '<label class="switch"><input type="checkbox" id="svp_share" name="svp_share" value="'.$share.'" ' . checked($share, "on", false) . '>';
+    echo '<label class="switch"><input type="checkbox" id="svp_share" name="svp_share" value="' . $share . '" ' . checked($share, "on", false) . '>';
     echo '<span class="slider round"></span></label></p>';
 
     // Navigation button switch
     echo '<p class="svp-field"><label for="svp_navigation">Navigation Button:</label>';
-    echo '<label class="switch"><input type="checkbox" id="svp_navigation" name="svp_navigation" value="'.$navigation.'" ' . checked($navigation, "on", false) . '>';
+    echo '<label class="switch"><input type="checkbox" id="svp_navigation" name="svp_navigation" value="' . $navigation . '" ' . checked($navigation, "on", false) . '>';
     echo '<span class="slider round"></span></label></p>';
 
     // Play/Pause button switch
     echo '<p class="svp-field"><label for="svp_play_pause">Play/Pause Button:</label>';
-    echo '<label class="switch"><input type="checkbox" id="svp_play_pause" name="svp_play_pause" value="'.$play_pause.'" ' . checked($play_pause, "on", false) . '>';
+    echo '<label class="switch"><input type="checkbox" id="svp_play_pause" name="svp_play_pause" value="' . $play_pause . '" ' . checked($play_pause, "on", false) . '>';
     echo '<span class="slider round"></span></label></p>';
 
     // Color Picker for color
@@ -95,6 +95,7 @@ function svp_cta_details_callback($post)
 {
     wp_nonce_field(basename(__FILE__), 'svp_cta_nonce');
     $ctas = get_post_meta($post->ID, '_svp_ctas', true);
+    $pop_ups = get_post_meta($post->ID, '_svp_pop_ups', true);
     echo '<div class="svp-meta-box-container">';
     echo '<ul id="svp_cta_list">';
     if (!empty($ctas)) {
@@ -121,6 +122,51 @@ function svp_cta_details_callback($post)
     }
     echo '</ul>';
     echo '<button type="button" id="add_cta_button" class="button">Add CTA</button>';
+    echo '</div>';
+
+    echo '<div class="svp-meta-box-container">';
+    echo '<ul id="svp_popup_list">';
+    if (!empty($pop_ups)) {
+        foreach ($pop_ups as $index => $popup) {
+            echo '<li>';
+            // Image Upload
+            $popup_image_url = !empty($popup['image']) ? esc_url($popup['image']) : '';
+            echo '<div class="popup-image-upload">';
+            echo '<img src="' . $popup_image_url . '" class="popup-image-preview" style="max-width: 100px; display: ' . ($popup_image_url ? 'block' : 'none') . ';" />';
+            echo '<input type="hidden" name="svp_pop_ups[' . $index . '][image]" value="' . $popup_image_url . '" class="popup-image-url" />';
+            echo '<button type="button" class="upload-popup-image button">' . ($popup_image_url ? 'Change Image' : 'Upload Image') . '</button>';
+            echo '</div>';
+
+            // Title Input
+            echo '<input type="text" name="svp_pop_ups[' . $index . '][title]" placeholder="Title" value="' . esc_attr($popup['title']) . '" />';
+
+            // Content WYSIWYG Editor
+            wp_editor($popup['content'], 'svp_popup_content_' . $index, array('textarea_name' => 'svp_pop_ups[' . $index . '][content]'));
+
+            // Position Selection
+            echo '<select name="svp_pop_ups[' . $index . '][position]" class="popup-position-select">';
+            echo '<option value="">Select Position</option>';
+            echo '<option value="popup--left" ' . selected($popup['position'], 'popup--left', false) . '>Left</option>';
+            echo '<option value="popup--right" ' . selected($popup['position'], 'popup--right', false) . '>Right</option>';
+            echo '<option value="popup--bottom" ' . selected($popup['position'], 'popup--bottom', false) . '>Bottom</option>';
+            echo '</select>';
+
+            // Size Option
+            echo '<select name="svp_pop_ups[' . $index . '][size]" class="popup-size-select">';
+            echo '<option value="autosize" ' . selected($popup['size'], 'autosize', false) . '>Auto Size</option>';
+            echo '<option value="fullsize" ' . selected($popup['size'], 'fullsize', false) . '>Full Size</option>';
+            echo '</select>';
+
+            // Display as Button Checkbox
+            echo '<p><label><input type="checkbox" name="svp_pop_ups[' . $index . '][display_as_button]" ' . checked($popup['display_as_button'], 'on', false) . ' /> Display as Button</label></p>';
+
+            // Remove Button
+            echo '<button class="remove-popup button">Remove</button>';
+            echo '</li>';
+        }
+    }
+    echo '</ul>';
+    echo '<button type="button" id="add_popup_button" class="button">Add Info Popup</button>';
     echo '</div>';
 }
 
@@ -169,6 +215,24 @@ function svp_save_meta_boxes($post_id)
     } else {
         delete_post_meta($post_id, '_svp_ctas');
     }
+
+    // Save the Popups
+    if (isset($_POST['svp_pop_ups'])) {
+        $popups = array_map(function ($popup) {
+            return [
+                'image' => sanitize_text_field($popup['image']),
+                'title' => sanitize_text_field($popup['title']),
+                'content' => wp_kses_post($popup['content']), // Allows safe HTML for content
+                'position' => sanitize_text_field($popup['position']),
+                'size' => sanitize_text_field($popup['size']),
+                'display_as_button' => isset($popup['display_as_button']) ? 'on' : 'off',
+            ];
+        }, $_POST['svp_pop_ups']);
+        update_post_meta($post_id, '_svp_popups', $popups);
+    } else {
+        delete_post_meta($post_id, '_svp_popups');
+    }
+
 
     // Save views, clicks, purchases
     if (isset($_POST['svp_views'])) {
@@ -391,6 +455,16 @@ function svp_admin_scripts()
                 {class: 'cta--bottom', label: 'Bottom'},
             ];
 
+            var popupPositionOptions = [
+                {class: 'popup--left', label: 'Left'},
+                {class: 'popup--right', label: 'Right'},
+                {class: 'popup--bottom', label: 'Bottom'},
+            ];
+            var popupSizeOptions = [
+                {value: 'autosize', label: 'Auto Size'},
+                {value: 'fullsize', label: 'Full Size'},
+            ];
+
             function updateIconPreview(selectElement) {
                 var selectedClass = $(selectElement).val();
                 var iconPreview = $(selectElement).siblings('.cta-icon-preview');
@@ -508,6 +582,75 @@ function svp_admin_scripts()
             });
             $('.cta-icon-select').each(function () {
                 updateIconPreview(this);
+            });
+
+            // Add Popup Logic
+            $('#add_popup_button').on('click', function () {
+                var popupCount = $('#svp_popup_list li').length;
+                var newPopupHtml = '<li>' +
+                    '<div class="popup-image-upload">' +
+                    '<img src="" class="popup-image-preview" style="max-width: 100px; display: none;" />' +
+                    '<input type="hidden" name="svp_pop_ups[' + popupCount + '][image]" class="popup-image-url" />' +
+                    '<button type="button" class="upload-popup-image button">Upload Image</button>' +
+                    '</div>' +
+                    '<input type="text" name="svp_pop_ups[' + popupCount + '][title]" placeholder="Title" />' +
+                    '<div>' +
+                    '<textarea name="svp_pop_ups[' + popupCount + '][content]" class="popup-content" placeholder="Content"></textarea>' +
+                    '</div>' +
+                    '<select name="svp_pop_ups[' + popupCount + '][position]" class="popup-position-select">' +
+                    '<option value="">Select Position</option>';
+
+                popupPositionOptions.forEach(function (option) {
+                    newPopupHtml += '<option value="' + option.class + '">' + option.label + '</option>';
+                });
+
+                newPopupHtml += '</select>' +
+                    '<select name="svp_pop_ups[' + popupCount + '][size]" class="popup-size-select">' +
+                    '<option value="">Select Size</option>';
+
+                popupSizeOptions.forEach(function (option) {
+                    newPopupHtml += '<option value="' + option.value + '">' + option.label + '</option>';
+                });
+
+                newPopupHtml += '</select>' +
+                    '<p><label><input type="checkbox" name="svp_pop_ups[' + popupCount + '][display_as_button]" /> Display as Button</label></p>' +
+                    '<button class="remove-popup button">Remove</button>' +
+                    '</li>';
+
+                $('#svp_popup_list').append(newPopupHtml);
+            });
+
+            $('#svp_popup_list').on('click', '.remove-popup', function (e) {
+                e.preventDefault();
+                $(this).closest('li').remove();
+            });
+
+            // Open media uploader for popup image
+            $('#svp_popup_list').on('click', '.upload-popup-image', function (e) {
+                e.preventDefault();
+                var button = $(this);
+                var imgPreview = button.siblings('.popup-image-preview');
+                var hiddenField = button.siblings('.popup-image-url');
+                openMediaUploader(button, imgPreview, hiddenField);
+            });
+
+            // WYSIWYG Editor Initialization
+            $('#svp_popup_list').on('focus', '.popup-content', function () {
+                var textareaId = $(this).attr('id');
+                if (!textareaId) {
+                    var randomId = 'popup_content_' + Math.random().toString(36).substr(2, 9);
+                    $(this).attr('id', randomId);
+                    wp.editor.initialize(randomId, {
+                        tinymce: {
+                            toolbar1: 'bold,italic,underline,|,bullist,numlist,|,link,unlink',
+                            toolbar2: '',
+                            toolbar3: '',
+                            menubar: false,
+                            statusbar: false,
+                        },
+                        quicktags: true,
+                    });
+                }
             });
 
         });
