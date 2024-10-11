@@ -3,6 +3,7 @@ if (is_admin() || $GLOBALS['pagenow'] === 'wp-login.php' || $GLOBALS['pagenow'] 
     return;
 }
 ?>
+
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
       integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
@@ -120,6 +121,10 @@ if (is_admin() || $GLOBALS['pagenow'] === 'wp-login.php' || $GLOBALS['pagenow'] 
         justify-content: center;
     }
 
+    .fixed-video-bubble .video-bubble__wrapper {
+        z-index: 2;
+    }
+
 </style>
 <?php
 $posts = get_posts([
@@ -130,12 +135,27 @@ $posts = get_posts([
 foreach ($posts as $post) {
     $videos = get_post_meta($post->ID, '_svp_uploaded_videos', true);
     $svp_ctas = get_post_meta($post->ID, '_svp_ctas', true);
+    $svp_pop_ups = get_post_meta($post->ID, '_svp_pop_ups', true);
     $navigation = get_post_meta($post->ID, '_svp_navigation', true);
     $mute = get_post_meta($post->ID, '_svp_mute', true);
     $share = get_post_meta($post->ID, '_svp_share', true);
     $play_pause = get_post_meta($post->ID, '_svp_play_pause', true);
 }
 ?>
+<?php if (get_post_meta($post->ID, '_svp_background_color', true)) { ?>
+    <style>
+        .video-bubble__modal .modal-header .btn-close, .video-bubble__modal .modal-cta .cta .btn-wrapper > *, .story__prev, .story__next, .story__next.swiper-button-next, .story__prev.swiper-button-prev, .story__product-card-cta a {
+            background: <?php echo get_post_meta($post->ID, '_svp_background_color', true) ?>;
+        }
+    </style>
+<?php } ?>
+<?php if (get_post_meta($post->ID, '_svp_hover_color', true)) { ?>
+    <style>
+        .video-bubble__modal .modal-header .btn-close:hover, .video-bubble__modal .modal-cta .cta .btn-wrapper > *:hover, .story__prev:not(.swiper-button-disabled):hover, .story__next:not(.swiper-button-disabled):hover, .story__next.swiper-button-next:not(.swiper-button-disabled):hover, .story__prev.swiper-button-prev:not(.swiper-button-disabled):hover, .story__product-card-cta a:hover {
+            background: <?php echo get_post_meta($post->ID, '_svp_hover_color', true) ?>;
+        }
+    </style>
+<?php } ?>
 <?php if (isset($videos["0"])): ?>
     <section class="fixed-video-bubble">
         <div class="video-bubble__wrapper">
@@ -176,9 +196,9 @@ foreach ($posts as $post) {
                                                 type="video/mp4">
                                     </video>
                                     <?php if ($play_pause == "on") { ?>
-                                    <div class="play-button" style="display: none;">
-                                        <i class="fa-solid fa-play"></i>
-                                    </div>
+                                        <div class="play-button" style="display: none;">
+                                            <i class="fa-solid fa-play"></i>
+                                        </div>
                                     <?php } ?>
                                 </div>
                             <?php endforeach; ?>
@@ -198,6 +218,21 @@ foreach ($posts as $post) {
             <div class="modal-cta">
                 <div class="cta cta--left">
                     <div class="btn-wrapper">
+                        <?php if ($svp_pop_ups):
+                            foreach ($svp_pop_ups as $popups):
+                                $popup_class = "";
+                                if ($popups["size"] == "fullsize") {
+                                    $popup_class = "fullsize";
+                                }
+                                ?>
+                                <a href="#" class="open-popup <?= $popup_class ?>" title="Open Popup">
+                                    <?php if ($popups["display_as_button"] == "on"): ?>
+                                      <i class="fa-solid fa-eye" ></i>
+                                    <?php else: ?>
+                                        <img src="<?php echo $popups["image"] ?>">
+                                    <?php endif; ?>
+                                </a>
+                            <?php endforeach; endif; ?>
                         <?php foreach ($svp_ctas as $cta):
                             if ($cta["position"] == "cta--left"):
                                 ?>
@@ -226,15 +261,6 @@ foreach ($posts as $post) {
                 <!-- If buttons are on right side -->
                 <div class="cta cta--right">
                     <div class="btn-wrapper">
-                        <!-- Full height Info popup CTA-->
-                        <a href="#" class="open-popup open-popup-h-full" title="Open Popup">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
-
-                        <!-- Auto height Info popup CTA-->
-                        <a href="#" class="open-popup" title="Open Popup">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
 
                         <?php foreach ($svp_ctas as $cta):
                             if ($cta["position"] == "cta--right"):
@@ -271,31 +297,26 @@ foreach ($posts as $post) {
                 <?php } ?>
             </div>
 
-            <!-- Full height Info Popup -->
-            <div class="story-popup h-full">
-                <div class="story-popup__content">
-                    <div class="story-popup__header">
-                        <h3>Popup title</h3>
-                        <button class="story-popup__close">&times;</button>
+            <?php if ($svp_pop_ups): foreach ($svp_pop_ups as $popups):
+                if ($popups["position"] == "popup--left"):
+                    $pp_width_class = "";
+                    if ($popups["size"] == "fullsize") {
+                        $pp_width_class = "h-full";
+                    }
+                    ?>
+                    <!-- Full height Info Popup -->
+                    <div class="story-popup <?= $pp_width_class ?>">
+                        <div class="story-popup__content">
+                            <div class="story-popup__header">
+                                <h3><?php echo $popups["title"] ?></h3>
+                                <button class="story-popup__close">&times;</button>
+                            </div>
+                            <div class="story-popup__body">
+                                <p><?php echo $popups["content"] ?></p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="story-popup__body">
-                        <p>This is a test</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Auto height Info Popup -->
-            <div class="story-popup">
-                <div class="story-popup__content">
-                    <div class="story-popup__header">
-                        <h3>Popup title 2</h3>
-                        <button class="story-popup__close">&times;</button>
-                    </div>
-                    <div class="story-popup__body">
-                        <p>This is a test</p>
-                    </div>
-                </div>
-            </div>
+                <?php endif; endforeach; endif; ?>
 
             <!-- Btn to toggle product popup -->
             <div class="story__product-popup-cta active">
@@ -340,17 +361,20 @@ foreach ($posts as $post) {
     document.addEventListener('DOMContentLoaded', function () {
         // Mute Button Click Handler
         const muteButton = document.querySelector('.action-btn--mute');
-        const videos = document.querySelectorAll('video'); // Select all video elements
+        const videos = document.querySelectorAll('video');
+        const shareButton = document.querySelector('.action-btn--share');
+        const shareNavigator = document.querySelector('.share-navigator');
+        const shareFacebook = document.querySelector('.share-btn--facebook');
+        const shareTwitter = document.querySelector('.share-btn--twitter');
+        const shareEmail = document.querySelector('.share-btn--email');
+        const videoUrl = "<?php echo get_permalink($post->ID); ?>";
 
         if (muteButton) {
             muteButton.addEventListener('click', function (e) {
                 e.preventDefault();
-                // Toggle the mute state for all videos
                 videos.forEach(video => {
                     video.muted = !video.muted;
                 });
-
-                // Update the button icon or text based on mute state
                 if (videos[0].muted) {
                     muteButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
                 } else {
@@ -358,9 +382,6 @@ foreach ($posts as $post) {
                 }
             });
         }
-
-        const shareButton = document.querySelector('.action-btn--share');
-        const shareNavigator = document.querySelector('.share-navigator');
 
         if (shareButton && shareNavigator) {
             shareButton.addEventListener('click', function (e) {
@@ -391,11 +412,6 @@ foreach ($posts as $post) {
             }, 10);
         }
 
-        const shareFacebook = document.querySelector('.share-btn--facebook');
-        const shareTwitter = document.querySelector('.share-btn--twitter');
-        const shareEmail = document.querySelector('.share-btn--email');
-
-        const videoUrl = "<?php echo get_permalink($post->ID); ?>"; // URL to share
 
         if (shareFacebook) {
             shareFacebook.addEventListener('click', function (e) {
@@ -429,17 +445,15 @@ foreach ($posts as $post) {
             // Function to handle play/pause
             const toggleVideo = () => {
                 if (video.paused) {
-                    // Pause all other videos
                     document.querySelectorAll('.video-player').forEach(v => {
                         v.pause();
-                        v.currentTime = 0; // Reset time if needed
+                        v.currentTime = 0;
                     });
-
                     video.play();
-                    playButton.style.display = 'none'; // Hide play button
+                    playButton.style.display = 'none';
                 } else {
                     video.pause();
-                    playButton.style.display = 'block'; // Show play button
+                    playButton.style.display = 'block';
                 }
             };
 
@@ -458,7 +472,14 @@ foreach ($posts as $post) {
             video.addEventListener('play', () => {
                 playButton.style.display = 'none';
             });
+            videoModal.addEventListener('hide.bs.modal', function () {
+                document.querySelectorAll('.video-player').forEach(v => {
+                    v.pause();
+                    v.currentTime = 0;
+                });
+            });
         });
     });
+
 
 </script>

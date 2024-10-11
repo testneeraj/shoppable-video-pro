@@ -21,7 +21,6 @@ function svp_video_details_callback($post)
 {
     wp_nonce_field(basename(__FILE__), 'svp_nonce');
     $videos = get_post_meta($post->ID, '_svp_uploaded_videos', true);
-    $ctas = get_post_meta($post->ID, '_svp_ctas', true);
 
     echo '<div class="svp-meta-box-container">';
     echo '<p class="svp-field"><label for="svp_uploaded_videos">Upload Videos:</label>';
@@ -228,9 +227,9 @@ function svp_save_meta_boxes($post_id)
                 'display_as_button' => isset($popup['display_as_button']) ? 'on' : 'off',
             ];
         }, $_POST['svp_pop_ups']);
-        update_post_meta($post_id, '_svp_popups', $popups);
+        update_post_meta($post_id, '_svp_pop_ups', $popups);
     } else {
-        delete_post_meta($post_id, '_svp_popups');
+        delete_post_meta($post_id, '_svp_pop_ups');
     }
 
 
@@ -436,6 +435,33 @@ input:checked + .slider {
 input:checked + .slider:before {
     transform: translateX(14px);
 }
+#svp_popup_list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+#svp_popup_list li div, 
+#svp_popup_list li input, 
+#svp_popup_list li select, 
+#svp_popup_list li textarea {
+    margin-right: 10px;
+}
+
+.popup-image-upload, .popup-position-select, .popup-size-select, 
+input[type="text"], textarea {
+    flex: 1;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+button {
+    margin-left: 5px;
+}
 </style>
 
     ';
@@ -595,7 +621,7 @@ function svp_admin_scripts()
                     '</div>' +
                     '<input type="text" name="svp_pop_ups[' + popupCount + '][title]" placeholder="Title" />' +
                     '<div>' +
-                    '<textarea name="svp_pop_ups[' + popupCount + '][content]" class="popup-content" placeholder="Content"></textarea>' +
+                    '<textarea name="svp_pop_ups[' + popupCount + '][content]" class="popup-content" id = "textarea_'+popupCount+'" placeholder="Content"></textarea>' +
                     '</div>' +
                     '<select name="svp_pop_ups[' + popupCount + '][position]" class="popup-position-select">' +
                     '<option value="">Select Position</option>';
@@ -618,6 +644,17 @@ function svp_admin_scripts()
                     '</li>';
 
                 $('#svp_popup_list').append(newPopupHtml);
+                wp.editor.initialize(textarea_2, {
+                    tinymce: {
+                        wpautop: true,
+                        plugins: 'lists,paste,media,wordpress',
+                        toolbar1: 'bold,italic,underline,bullist,numlist,link,unlink,wp_adv',
+                        toolbar2: 'formatselect,alignleft,aligncenter,alignright,alignjustify',
+                        toolbar3: 'media',
+                    },
+                    quicktags: true,
+                    mediaButtons: true
+                })
             });
 
             $('#svp_popup_list').on('click', '.remove-popup', function (e) {

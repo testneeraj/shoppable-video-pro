@@ -1,4 +1,4 @@
-(function() {
+(function () {
     const t = document.createElement("link").relList;
     if (t && t.supports && t.supports("modulepreload")) return;
     for (const i of document.querySelectorAll('link[rel="modulepreload"]')) n(i);
@@ -35,10 +35,10 @@ var I = "top",
     ze = "viewport",
     At = "popper",
     rn = "reference",
-    Be = Pt.reduce(function(s, t) {
+    Be = Pt.reduce(function (s, t) {
         return s.concat([t + "-" + _t, t + "-" + Ot])
     }, []),
-    Ge = [].concat(Pt, [pe]).reduce(function(s, t) {
+    Ge = [].concat(Pt, [pe]).reduce(function (s, t) {
         return s.concat([t, t + "-" + _t, t + "-" + Ot])
     }, []),
     on = "beforeRead",
@@ -83,11 +83,11 @@ function Xe(s) {
 
 function ui(s) {
     var t = s.state;
-    Object.keys(t.elements).forEach(function(e) {
+    Object.keys(t.elements).forEach(function (e) {
         var n = t.styles[e] || {},
             i = t.attributes[e] || {},
             r = t.elements[e];
-        !H(r) || !z(r) || (Object.assign(r.style, n), Object.keys(i).forEach(function(o) {
+        !H(r) || !z(r) || (Object.assign(r.style, n), Object.keys(i).forEach(function (o) {
             var a = i[o];
             a === !1 ? r.removeAttribute(o) : r.setAttribute(o, a === !0 ? "" : a)
         }))
@@ -109,20 +109,21 @@ function di(s) {
             reference: {}
         };
     return Object.assign(t.elements.popper.style, e.popper), t.styles = e, t.elements.arrow && Object.assign(t.elements.arrow.style, e.arrow),
-        function() {
-            Object.keys(t.elements).forEach(function(n) {
+        function () {
+            Object.keys(t.elements).forEach(function (n) {
                 var i = t.elements[n],
                     r = t.attributes[n] || {},
                     o = Object.keys(t.styles.hasOwnProperty(n) ? t.styles[n] : e[n]),
-                    a = o.reduce(function(c, d) {
+                    a = o.reduce(function (c, d) {
                         return c[d] = "", c
                     }, {});
-                !H(i) || !z(i) || (Object.assign(i.style, a), Object.keys(r).forEach(function(c) {
+                !H(i) || !z(i) || (Object.assign(i.style, a), Object.keys(r).forEach(function (c) {
                     i.removeAttribute(c)
                 }))
             })
         }
 }
+
 const Qe = {
     name: "applyStyles",
     enabled: !0,
@@ -135,13 +136,14 @@ const Qe = {
 function U(s) {
     return s.split("-")[0]
 }
+
 var pt = Math.max,
     ue = Math.min,
     St = Math.round;
 
 function Fe() {
     var s = navigator.userAgentData;
-    return s != null && s.brands && Array.isArray(s.brands) ? s.brands.map(function(t) {
+    return s != null && s.brands && Array.isArray(s.brands) ? s.brands.map(function (t) {
         return t.brand + "/" + t.version
     }).join(" ") : navigator.userAgent
 }
@@ -268,11 +270,12 @@ function vn(s) {
 }
 
 function bn(s, t) {
-    return t.reduce(function(e, n) {
+    return t.reduce(function (e, n) {
         return e[n] = s, e
     }, {})
 }
-var _i = function(t, e) {
+
+var _i = function (t, e) {
     return t = typeof t == "function" ? t(Object.assign({}, e.rects, {
         placement: e.placement
     })) : t, vn(typeof t != "number" ? t : bn(t, Pt))
@@ -314,6 +317,7 @@ function gi(s) {
         i = n === void 0 ? "[data-popper-arrow]" : n;
     i != null && (typeof i == "string" && (i = t.elements.popper.querySelector(i), !i) || gn(t.elements.popper, i) && (t.elements.arrow = i))
 }
+
 const yn = {
     name: "arrow",
     enabled: !0,
@@ -327,6 +331,7 @@ const yn = {
 function $t(s) {
     return s.split("-")[1]
 }
+
 var Ei = {
     top: "auto",
     right: "auto",
@@ -435,6 +440,7 @@ function bi(s) {
         "data-popper-placement": t.placement
     })
 }
+
 const ts = {
     name: "computeStyles",
     enabled: !0,
@@ -456,20 +462,22 @@ function yi(s) {
         a = o === void 0 ? !0 : o,
         c = V(t.elements.popper),
         d = [].concat(t.scrollParents.reference, t.scrollParents.popper);
-    return r && d.forEach(function(u) {
+    return r && d.forEach(function (u) {
         u.addEventListener("scroll", e.update, te)
     }), a && c.addEventListener("resize", e.update, te),
-        function() {
-            r && d.forEach(function(u) {
+        function () {
+            r && d.forEach(function (u) {
                 u.removeEventListener("scroll", e.update, te)
             }), a && c.removeEventListener("resize", e.update, te)
         }
 }
+
 const es = {
     name: "eventListeners",
     enabled: !0,
     phase: "write",
-    fn: function() {},
+    fn: function () {
+    },
     effect: yi,
     data: {}
 };
@@ -481,17 +489,18 @@ var Ai = {
 };
 
 function ae(s) {
-    return s.replace(/left|right|bottom|top/g, function(t) {
+    return s.replace(/left|right|bottom|top/g, function (t) {
         return Ai[t]
     })
 }
+
 var Ti = {
     start: "end",
     end: "start"
 };
 
 function Ts(s) {
-    return s.replace(/start|end/g, function(t) {
+    return s.replace(/start|end/g, function (t) {
         return Ti[t]
     })
 }
@@ -592,7 +601,7 @@ function Si(s) {
     var t = Ft(_e(s)),
         e = ["absolute", "fixed"].indexOf(Q(s).position) >= 0,
         n = e && H(s) ? Kt(s) : s;
-    return mt(n) ? t.filter(function(i) {
+    return mt(n) ? t.filter(function (i) {
         return mt(i) && gn(i, n) && z(i) !== "body"
     }) : []
 }
@@ -601,7 +610,7 @@ function Ni(s, t, e, n) {
     var i = t === "clippingParents" ? Si(s) : [].concat(t),
         r = [].concat(i, [e]),
         o = r[0],
-        a = r.reduce(function(c, d) {
+        a = r.reduce(function (c, d) {
             var u = ws(s, d, n);
             return c.top = pt(u.top, c.top), c.right = ue(u.right, c.right), c.bottom = ue(u.bottom, c.bottom), c.left = pt(u.left, c.left), c
         }, ws(s, o, n));
@@ -703,7 +712,7 @@ function Dt(s, t) {
         D = s.modifiersData.offset;
     if (m === At && D) {
         var j = D[i];
-        Object.keys(O).forEach(function(L) {
+        Object.keys(O).forEach(function (L) {
             var at = [k, R].indexOf(L) >= 0 ? 1 : -1,
                 lt = [I, R].indexOf(L) >= 0 ? "y" : "x";
             O[L] += j[lt] * at
@@ -723,14 +732,14 @@ function $i(s, t) {
         c = e.allowedAutoPlacements,
         d = c === void 0 ? Ge : c,
         u = $t(n),
-        E = u ? a ? Be : Be.filter(function(g) {
+        E = u ? a ? Be : Be.filter(function (g) {
             return $t(g) === u
         }) : Pt,
-        m = E.filter(function(g) {
+        m = E.filter(function (g) {
             return d.indexOf(g) >= 0
         });
     m.length === 0 && (m = E);
-    var h = m.reduce(function(g, f) {
+    var h = m.reduce(function (g, f) {
         return g[f] = Dt(s, {
             placement: f,
             boundary: i,
@@ -738,7 +747,7 @@ function $i(s, t) {
             padding: o
         })[U(f)], g
     }, {});
-    return Object.keys(h).sort(function(g, f) {
+    return Object.keys(h).sort(function (g, f) {
         return h[g] - h[f]
     })
 }
@@ -754,7 +763,7 @@ function Li(s) {
         e = s.options,
         n = s.name;
     if (!t.modifiersData[n]._skip) {
-        for (var i = e.mainAxis, r = i === void 0 ? !0 : i, o = e.altAxis, a = o === void 0 ? !0 : o, c = e.fallbackPlacements, d = e.padding, u = e.boundary, E = e.rootBoundary, m = e.altBoundary, h = e.flipVariations, g = h === void 0 ? !0 : h, f = e.allowedAutoPlacements, v = t.options.placement, b = U(v), y = b === v, A = c || (y || !g ? [ae(v)] : Di(v)), p = [v].concat(A).reduce(function(vt, J) {
+        for (var i = e.mainAxis, r = i === void 0 ? !0 : i, o = e.altAxis, a = o === void 0 ? !0 : o, c = e.fallbackPlacements, d = e.padding, u = e.boundary, E = e.rootBoundary, m = e.altBoundary, h = e.flipVariations, g = h === void 0 ? !0 : h, f = e.allowedAutoPlacements, v = t.options.placement, b = U(v), y = b === v, A = c || (y || !g ? [ae(v)] : Di(v)), p = [v].concat(A).reduce(function (vt, J) {
             return vt.concat(U(J) === pe ? $i(t, {
                 placement: J,
                 boundary: u,
@@ -780,7 +789,7 @@ function Li(s) {
             T[lt] > w[lt] && (K = ae(K));
             var Gt = ae(K),
                 ct = [];
-            if (r && ct.push(M[j] <= 0), a && ct.push(M[K] <= 0, M[Gt] <= 0), ct.every(function(vt) {
+            if (r && ct.push(M[j] <= 0), a && ct.push(M[K] <= 0, M[Gt] <= 0), ct.every(function (vt) {
                 return vt
             })) {
                 S = D, N = !1;
@@ -789,10 +798,10 @@ function Li(s) {
             C.set(D, ct)
         }
         if (N)
-            for (var Xt = g ? 3 : 1, Ae = function(J) {
-                var Vt = p.find(function(Zt) {
+            for (var Xt = g ? 3 : 1, Ae = function (J) {
+                var Vt = p.find(function (Zt) {
                     var ut = C.get(Zt);
-                    if (ut) return ut.slice(0, J).every(function(Te) {
+                    if (ut) return ut.slice(0, J).every(function (Te) {
                         return Te
                     })
                 });
@@ -804,6 +813,7 @@ function Li(s) {
         t.placement !== S && (t.modifiersData[n]._skip = !0, t.placement = S, t.reset = !0)
     }
 }
+
 const wn = {
     name: "flip",
     enabled: !0,
@@ -828,7 +838,7 @@ function Cs(s, t, e) {
 }
 
 function Os(s) {
-    return [I, k, R, P].some(function(t) {
+    return [I, k, R, P].some(function (t) {
         return s[t] >= 0
     })
 }
@@ -859,6 +869,7 @@ function Ii(s) {
         "data-popper-escaped": E
     })
 }
+
 const Cn = {
     name: "hide",
     enabled: !0,
@@ -890,7 +901,7 @@ function xi(s) {
         n = s.name,
         i = e.offset,
         r = i === void 0 ? [0, 0] : i,
-        o = Ge.reduce(function(u, E) {
+        o = Ge.reduce(function (u, E) {
             return u[E] = Pi(E, t.rects, r), u
         }, {}),
         a = o[t.placement],
@@ -898,6 +909,7 @@ function xi(s) {
         d = a.y;
     t.modifiersData.popperOffsets != null && (t.modifiersData.popperOffsets.x += c, t.modifiersData.popperOffsets.y += d), t.modifiersData[n] = o
 }
+
 const On = {
     name: "offset",
     enabled: !0,
@@ -916,6 +928,7 @@ function Mi(s) {
         placement: t.placement
     })
 }
+
 const rs = {
     name: "popperOffsets",
     enabled: !0,
@@ -1020,6 +1033,7 @@ function ki(s) {
         t.modifiersData[n] = j
     }
 }
+
 const Sn = {
     name: "preventOverflow",
     enabled: !0,
@@ -1072,29 +1086,30 @@ function Fi(s) {
     var t = new Map,
         e = new Set,
         n = [];
-    s.forEach(function(r) {
+    s.forEach(function (r) {
         t.set(r.name, r)
     });
 
     function i(r) {
         e.add(r.name);
         var o = [].concat(r.requires || [], r.requiresIfExists || []);
-        o.forEach(function(a) {
+        o.forEach(function (a) {
             if (!e.has(a)) {
                 var c = t.get(a);
                 c && i(c)
             }
         }), n.push(r)
     }
-    return s.forEach(function(r) {
+
+    return s.forEach(function (r) {
         e.has(r.name) || i(r)
     }), n
 }
 
 function ji(s) {
     var t = Fi(s);
-    return _n.reduce(function(e, n) {
-        return e.concat(t.filter(function(i) {
+    return _n.reduce(function (e, n) {
+        return e.concat(t.filter(function (i) {
             return i.phase === n
         }))
     }, [])
@@ -1102,9 +1117,9 @@ function ji(s) {
 
 function Ki(s) {
     var t;
-    return function() {
-        return t || (t = new Promise(function(e) {
-            Promise.resolve().then(function() {
+    return function () {
+        return t || (t = new Promise(function (e) {
+            Promise.resolve().then(function () {
                 t = void 0, e(s())
             })
         })), t
@@ -1112,17 +1127,18 @@ function Ki(s) {
 }
 
 function Yi(s) {
-    var t = s.reduce(function(e, n) {
+    var t = s.reduce(function (e, n) {
         var i = e[n.name];
         return e[n.name] = i ? Object.assign({}, i, n, {
             options: Object.assign({}, i.options, n.options),
             data: Object.assign({}, i.data, n.data)
         }) : n, e
     }, {});
-    return Object.keys(t).map(function(e) {
+    return Object.keys(t).map(function (e) {
         return t[e]
     })
 }
+
 var Ss = {
     placement: "bottom",
     modifiers: [],
@@ -1131,7 +1147,7 @@ var Ss = {
 
 function Ns() {
     for (var s = arguments.length, t = new Array(s), e = 0; e < s; e++) t[e] = arguments[e];
-    return !t.some(function(n) {
+    return !t.some(function (n) {
         return !(n && typeof n.getBoundingClientRect == "function")
     })
 }
@@ -1143,7 +1159,7 @@ function me(s) {
         n = e === void 0 ? [] : e,
         i = t.defaultOptions,
         r = i === void 0 ? Ss : i;
-    return function(a, c, d) {
+    return function (a, c, d) {
         d === void 0 && (d = r);
         var u = {
                 placement: "bottom",
@@ -1161,18 +1177,18 @@ function me(s) {
             m = !1,
             h = {
                 state: u,
-                setOptions: function(b) {
+                setOptions: function (b) {
                     var y = typeof b == "function" ? b(u.options) : b;
                     f(), u.options = Object.assign({}, r, u.options, y), u.scrollParents = {
                         reference: mt(a) ? Ft(a) : a.contextElement ? Ft(a.contextElement) : [],
                         popper: Ft(c)
                     };
                     var A = ji(Yi([].concat(n, u.options.modifiers)));
-                    return u.orderedModifiers = A.filter(function(p) {
+                    return u.orderedModifiers = A.filter(function (p) {
                         return p.enabled
                     }), g(), h.update()
                 },
-                forceUpdate: function() {
+                forceUpdate: function () {
                     if (!m) {
                         var b = u.elements,
                             y = b.reference,
@@ -1181,7 +1197,7 @@ function me(s) {
                             u.rects = {
                                 reference: Bi(y, Kt(A), u.options.strategy === "fixed"),
                                 popper: Ze(A)
-                            }, u.reset = !1, u.placement = u.options.placement, u.orderedModifiers.forEach(function(O) {
+                            }, u.reset = !1, u.placement = u.options.placement, u.orderedModifiers.forEach(function (O) {
                                 return u.modifiersData[O.name] = Object.assign({}, O.data)
                             });
                             for (var p = 0; p < u.orderedModifiers.length; p++) {
@@ -1204,22 +1220,22 @@ function me(s) {
                         }
                     }
                 },
-                update: Ki(function() {
-                    return new Promise(function(v) {
+                update: Ki(function () {
+                    return new Promise(function (v) {
                         h.forceUpdate(), v(u)
                     })
                 }),
-                destroy: function() {
+                destroy: function () {
                     f(), m = !0
                 }
             };
         if (!Ns(a, c)) return h;
-        h.setOptions(d).then(function(v) {
+        h.setOptions(d).then(function (v) {
             !m && d.onFirstUpdate && d.onFirstUpdate(v)
         });
 
         function g() {
-            u.orderedModifiers.forEach(function(v) {
+            u.orderedModifiers.forEach(function (v) {
                 var b = v.name,
                     y = v.options,
                     A = y === void 0 ? {} : y,
@@ -1231,20 +1247,23 @@ function me(s) {
                             instance: h,
                             options: A
                         }),
-                        w = function() {};
+                        w = function () {
+                        };
                     E.push(T || w)
                 }
             })
         }
 
         function f() {
-            E.forEach(function(v) {
+            E.forEach(function (v) {
                 return v()
             }), E = []
         }
+
         return h
     }
 }
+
 var Ui = me(),
     qi = [es, rs, ts, Qe],
     zi = me({
@@ -1366,7 +1385,8 @@ const tt = new Map,
         }
         return s instanceof ShadowRoot ? s : s.parentNode ? Ln(s.parentNode) : null
     },
-    de = () => {},
+    de = () => {
+    },
     Yt = s => {
         s.offsetHeight
     },
@@ -1466,7 +1486,7 @@ function Vn(s, t, e) {
 function Ds(s, t, e, n, i) {
     if (typeof t != "string" || !s) return;
     let [r, o, a] = Vn(t, e, n);
-    t in xn && (o = (g => function(f) {
+    t in xn && (o = (g => function (f) {
         if (!f.relatedTarget || f.relatedTarget !== f.delegateTarget && !f.delegateTarget.contains(f.relatedTarget)) return g.call(this, f)
     })(o));
     const c = Rn(s),
@@ -1494,6 +1514,7 @@ function lr(s, t, e, n) {
 function Hn(s) {
     return s = s.replace(nr, ""), xn[s] || s
 }
+
 const l = {
     on(s, t, e, n) {
         Ds(s, t, e, n, !1)
@@ -1564,6 +1585,7 @@ function Ls(s) {
 function $e(s) {
     return s.replace(/[A-Z]/g, t => `-${t.toLowerCase()}`)
 }
+
 const X = {
     setDataAttribute(s, t, e) {
         s.setAttribute(`data-bs-${$e(t)}`, e)
@@ -1585,22 +1607,28 @@ const X = {
         return Ls(s.getAttribute(`data-bs-${$e(t)}`))
     }
 };
+
 class Ut {
     static get Default() {
         return {}
     }
+
     static get DefaultType() {
         return {}
     }
+
     static get NAME() {
         throw new Error('You have to implement the static method "NAME", for each component!')
     }
+
     _getConfig(t) {
         return t = this._mergeConfigObj(t), t = this._configAfterMerge(t), this._typeCheckConfig(t), t
     }
+
     _configAfterMerge(t) {
         return t
     }
+
     _mergeConfigObj(t, e) {
         const n = G(e) ? X.getDataAttribute(e, "config") : {};
         return {
@@ -1610,6 +1638,7 @@ class Ut {
             ...typeof t == "object" ? t : {}
         }
     }
+
     _typeCheckConfig(t, e = this.constructor.DefaultType) {
         for (const [n, i] of Object.entries(e)) {
             const r = t[n],
@@ -1618,40 +1647,52 @@ class Ut {
         }
     }
 }
+
 const cr = "5.3.2";
+
 class Y extends Ut {
     constructor(t, e) {
         super(), t = et(t), t && (this._element = t, this._config = this._getConfig(e), Oe.set(this._element, this.constructor.DATA_KEY, this))
     }
+
     dispose() {
         Oe.remove(this._element, this.constructor.DATA_KEY), l.off(this._element, this.constructor.EVENT_KEY);
         for (const t of Object.getOwnPropertyNames(this)) this[t] = null
     }
+
     _queueCallback(t, e, n = !0) {
         Pn(t, e, n)
     }
+
     _getConfig(t) {
         return t = this._mergeConfigObj(t, this._element), t = this._configAfterMerge(t), this._typeCheckConfig(t), t
     }
+
     static getInstance(t) {
         return Oe.get(et(t), this.DATA_KEY)
     }
+
     static getOrCreateInstance(t, e = {}) {
         return this.getInstance(t) || new this(t, typeof e == "object" ? e : null)
     }
+
     static get VERSION() {
         return cr
     }
+
     static get DATA_KEY() {
         return `bs.${this.NAME}`
     }
+
     static get EVENT_KEY() {
         return `.${this.DATA_KEY}`
     }
+
     static eventName(t) {
         return `${t}${this.EVENT_KEY}`
     }
 }
+
 const De = s => {
         let t = s.getAttribute("data-bs-target");
         if (!t || t === "#") {
@@ -1713,7 +1754,7 @@ const De = s => {
     ge = (s, t = "hide") => {
         const e = `click.dismiss${s.EVENT_KEY}`,
             n = s.NAME;
-        l.on(document, e, `[data-bs-dismiss="${n}"]`, function(i) {
+        l.on(document, e, `[data-bs-dismiss="${n}"]`, function (i) {
             if (["A", "AREA"].includes(this.tagName) && i.preventDefault(), st(this)) return;
             const r = _.getElementFromSelector(this) || this.closest(`.${n}`);
             s.getOrCreateInstance(r)[t]()
@@ -1726,21 +1767,25 @@ const De = s => {
     hr = `closed${Wn}`,
     pr = "fade",
     _r = "show";
+
 class Ee extends Y {
     static get NAME() {
         return ur
     }
+
     close() {
         if (l.trigger(this._element, fr).defaultPrevented) return;
         this._element.classList.remove(_r);
         const e = this._element.classList.contains(pr);
         this._queueCallback(() => this._destroyElement(), this._element, e)
     }
+
     _destroyElement() {
         this._element.remove(), l.trigger(this._element, hr), this.dispose()
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = Ee.getOrCreateInstance(this);
             if (typeof t == "string") {
                 if (e[t] === void 0 || t.startsWith("_") || t === "constructor") throw new TypeError(`No method named "${t}"`);
@@ -1749,6 +1794,7 @@ class Ee extends Y {
         })
     }
 }
+
 ge(Ee, "close");
 F(Ee);
 const mr = "button",
@@ -1758,20 +1804,24 @@ const mr = "button",
     br = "active",
     Is = '[data-bs-toggle="button"]',
     yr = `click${Er}${vr}`;
+
 class ve extends Y {
     static get NAME() {
         return mr
     }
+
     toggle() {
         this._element.setAttribute("aria-pressed", this._element.classList.toggle(br))
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = ve.getOrCreateInstance(this);
             t === "toggle" && e[t]()
         })
     }
 }
+
 l.on(document, yr, Is, s => {
     s.preventDefault();
     const t = s.target.closest(Is);
@@ -1799,22 +1849,28 @@ const Ar = "swipe",
         leftCallback: "(function|null)",
         rightCallback: "(function|null)"
     };
+
 class fe extends Ut {
     constructor(t, e) {
         super(), this._element = t, !(!t || !fe.isSupported()) && (this._config = this._getConfig(e), this._deltaX = 0, this._supportPointerEvents = !!window.PointerEvent, this._initEvents())
     }
+
     static get Default() {
         return Ir
     }
+
     static get DefaultType() {
         return Pr
     }
+
     static get NAME() {
         return Ar
     }
+
     dispose() {
         l.off(this._element, Mt)
     }
+
     _start(t) {
         if (!this._supportPointerEvents) {
             this._deltaX = t.touches[0].clientX;
@@ -1822,28 +1878,35 @@ class fe extends Ut {
         }
         this._eventIsPointerPenTouch(t) && (this._deltaX = t.clientX)
     }
+
     _end(t) {
         this._eventIsPointerPenTouch(t) && (this._deltaX = t.clientX - this._deltaX), this._handleSwipe(), x(this._config.endCallback)
     }
+
     _move(t) {
         this._deltaX = t.touches && t.touches.length > 1 ? 0 : t.touches[0].clientX - this._deltaX
     }
+
     _handleSwipe() {
         const t = Math.abs(this._deltaX);
         if (t <= Lr) return;
         const e = t / this._deltaX;
         this._deltaX = 0, e && x(e > 0 ? this._config.rightCallback : this._config.leftCallback)
     }
+
     _initEvents() {
         this._supportPointerEvents ? (l.on(this._element, Or, t => this._start(t)), l.on(this._element, Sr, t => this._end(t)), this._element.classList.add(Dr)) : (l.on(this._element, Tr, t => this._start(t)), l.on(this._element, wr, t => this._move(t)), l.on(this._element, Cr, t => this._end(t)))
     }
+
     _eventIsPointerPenTouch(t) {
         return this._supportPointerEvents && (t.pointerType === $r || t.pointerType === Nr)
     }
+
     static isSupported() {
         return "ontouchstart" in document.documentElement || navigator.maxTouchPoints > 0
     }
 }
+
 const xr = "carousel",
     Mr = "bs.carousel",
     rt = `.${Mr}`,
@@ -1897,34 +1960,44 @@ const xr = "carousel",
         touch: "boolean",
         wrap: "boolean"
     };
+
 class qt extends Y {
     constructor(t, e) {
         super(t, e), this._interval = null, this._activeElement = null, this._isSliding = !1, this.touchTimeout = null, this._swipeHelper = null, this._indicatorsElement = _.findOne(Jr, this._element), this._addEventListeners(), this._config.ride === Fn && this.cycle()
     }
+
     static get Default() {
         return no
     }
+
     static get DefaultType() {
         return io
     }
+
     static get NAME() {
         return xr
     }
+
     next() {
         this._slide(Ht)
     }
+
     nextWhenVisible() {
         !document.hidden && xt(this._element) && this.next()
     }
+
     prev() {
         this._slide(bt)
     }
+
     pause() {
         this._isSliding && Dn(this._element), this._clearInterval()
     }
+
     cycle() {
         this._clearInterval(), this._updateInterval(), this._interval = setInterval(() => this.nextWhenVisible(), this._config.interval)
     }
+
     _maybeEnableCycle() {
         if (this._config.ride) {
             if (this._isSliding) {
@@ -1934,6 +2007,7 @@ class qt extends Y {
             this.cycle()
         }
     }
+
     to(t) {
         const e = this._getItems();
         if (t > e.length - 1 || t < 0) return;
@@ -1946,15 +2020,19 @@ class qt extends Y {
         const i = t > n ? Ht : bt;
         this._slide(i, e[t])
     }
+
     dispose() {
         this._swipeHelper && this._swipeHelper.dispose(), super.dispose()
     }
+
     _configAfterMerge(t) {
         return t.defaultInterval = t.interval, t
     }
+
     _addEventListeners() {
         this._config.keyboard && l.on(this._element, Wr, t => this._keydown(t)), this._config.pause === "hover" && (l.on(this._element, Br, () => this.pause()), l.on(this._element, Fr, () => this._maybeEnableCycle())), this._config.touch && fe.isSupported() && this._addTouchEventListeners()
     }
+
     _addTouchEventListeners() {
         for (const n of _.find(Zr, this._element)) l.on(n, jr, i => i.preventDefault());
         const e = {
@@ -1966,14 +2044,17 @@ class qt extends Y {
         };
         this._swipeHelper = new fe(this._element, e)
     }
+
     _keydown(t) {
         if (/input|textarea/i.test(t.target.tagName)) return;
         const e = so[t.key];
         e && (t.preventDefault(), this._slide(this._directionToOrder(e)))
     }
+
     _getItemIndex(t) {
         return this._getItems().indexOf(t)
     }
+
     _setActiveIndicatorElement(t) {
         if (!this._indicatorsElement) return;
         const e = _.findOne(jn, this._indicatorsElement);
@@ -1981,12 +2062,14 @@ class qt extends Y {
         const n = _.findOne(`[data-bs-slide-to="${t}"]`, this._indicatorsElement);
         n && (n.classList.add(ee), n.setAttribute("aria-current", "true"))
     }
+
     _updateInterval() {
         const t = this._activeElement || this._getActive();
         if (!t) return;
         const e = Number.parseInt(t.getAttribute("data-bs-interval"), 10);
         this._config.interval = e || this._config.defaultInterval
     }
+
     _slide(t, e = null) {
         if (this._isSliding) return;
         const n = this._getActive(),
@@ -2011,26 +2094,33 @@ class qt extends Y {
         };
         this._queueCallback(m, n, this._isAnimated()), d && this.cycle()
     }
+
     _isAnimated() {
         return this._element.classList.contains(Ur)
     }
+
     _getActive() {
         return _.findOne(Qr, this._element)
     }
+
     _getItems() {
         return _.find(Kn, this._element)
     }
+
     _clearInterval() {
         this._interval && (clearInterval(this._interval), this._interval = null)
     }
+
     _directionToOrder(t) {
         return W() ? t === Tt ? bt : Ht : t === Tt ? Ht : bt
     }
+
     _orderToDirection(t) {
         return W() ? t === bt ? Tt : le : t === bt ? le : Tt
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = qt.getOrCreateInstance(this, t);
             if (typeof t == "number") {
                 e.to(t);
@@ -2043,7 +2133,8 @@ class qt extends Y {
         })
     }
 }
-l.on(document, Yr, to, function(s) {
+
+l.on(document, Yr, to, function (s) {
     const t = _.getElementFromSelector(this);
     if (!t || !t.classList.contains(Fn)) return;
     s.preventDefault();
@@ -2091,6 +2182,7 @@ const ro = "collapse",
         parent: "(null|element)",
         toggle: "boolean"
     };
+
 class jt extends Y {
     constructor(t, e) {
         super(t, e), this._isTransitioning = !1, this._triggerArray = [];
@@ -2102,18 +2194,23 @@ class jt extends Y {
         }
         this._initializeChildren(), this._config.parent || this._addAriaAndCollapsedClass(this._triggerArray, this._isShown()), this._config.toggle && this.toggle()
     }
+
     static get Default() {
         return bo
     }
+
     static get DefaultType() {
         return yo
     }
+
     static get NAME() {
         return ro
     }
+
     toggle() {
         this._isShown() ? this.hide() : this.show()
     }
+
     show() {
         if (this._isTransitioning || this._isShown()) return;
         let t = [];
@@ -2126,9 +2223,10 @@ class jt extends Y {
         const i = () => {
                 this._isTransitioning = !1, this._element.classList.remove(se), this._element.classList.add(Ct, Ie), this._element.style[n] = "", l.trigger(this._element, co)
             },
-            o = `scroll${n[0].toUpperCase()+n.slice(1)}`;
+            o = `scroll${n[0].toUpperCase() + n.slice(1)}`;
         this._queueCallback(i, this._element, !0), this._element.style[n] = `${this._element[o]}px`
     }
+
     hide() {
         if (this._isTransitioning || !this._isShown() || l.trigger(this._element, uo).defaultPrevented) return;
         const e = this._getDimension();
@@ -2143,15 +2241,19 @@ class jt extends Y {
         };
         this._element.style[e] = "", this._queueCallback(n, this._element, !0)
     }
+
     _isShown(t = this._element) {
         return t.classList.contains(Ie)
     }
+
     _configAfterMerge(t) {
         return t.toggle = !!t.toggle, t.parent = et(t.parent), t
     }
+
     _getDimension() {
         return this._element.classList.contains(mo) ? go : Eo
     }
+
     _initializeChildren() {
         if (!this._config.parent) return;
         const t = this._getFirstLevelChildren(Ue);
@@ -2160,17 +2262,20 @@ class jt extends Y {
             n && this._addAriaAndCollapsedClass([e], this._isShown(n))
         }
     }
+
     _getFirstLevelChildren(t) {
         const e = _.find(_o, this._config.parent);
         return _.find(t, this._config.parent).filter(n => !e.includes(n))
     }
+
     _addAriaAndCollapsedClass(t, e) {
         if (t.length)
             for (const n of t) n.classList.toggle(po, !e), n.setAttribute("aria-expanded", e)
     }
+
     static jQueryInterface(t) {
         const e = {};
-        return typeof t == "string" && /show|hide/.test(t) && (e.toggle = !1), this.each(function() {
+        return typeof t == "string" && /show|hide/.test(t) && (e.toggle = !1), this.each(function () {
             const n = jt.getOrCreateInstance(this, e);
             if (typeof t == "string") {
                 if (typeof n[t] > "u") throw new TypeError(`No method named "${t}"`);
@@ -2179,7 +2284,8 @@ class jt extends Y {
         })
     }
 }
-l.on(document, ho, Ue, function(s) {
+
+l.on(document, ho, Ue, function (s) {
     (s.target.tagName === "A" || s.delegateTarget && s.delegateTarget.tagName === "A") && s.preventDefault();
     for (const t of _.getMultipleElementsFromSelector(this)) jt.getOrCreateInstance(t, {
         toggle: !1
@@ -2238,22 +2344,28 @@ const Ps = "dropdown",
         popperConfig: "(null|object|function)",
         reference: "(string|element|object)"
     };
+
 class q extends Y {
     constructor(t, e) {
         super(t, e), this._popper = null, this._parent = this._element.parentNode, this._menu = _.next(this._element, ce)[0] || _.prev(this._element, ce)[0] || _.findOne(ce, this._parent), this._inNavbar = this._detectNavbar()
     }
+
     static get Default() {
         return zo
     }
+
     static get DefaultType() {
         return Go
     }
+
     static get NAME() {
         return Ps
     }
+
     toggle() {
         return this._isShown() ? this.hide() : this.show()
     }
+
     show() {
         if (st(this._element) || this._isShown()) return;
         const t = {
@@ -2265,6 +2377,7 @@ class q extends Y {
             this._element.focus(), this._element.setAttribute("aria-expanded", !0), this._menu.classList.add(wt), this._element.classList.add(wt), l.trigger(this._element, $o, t)
         }
     }
+
     hide() {
         if (st(this._element) || !this._isShown()) return;
         const t = {
@@ -2272,12 +2385,15 @@ class q extends Y {
         };
         this._completeHide(t)
     }
+
     dispose() {
         this._popper && this._popper.destroy(), super.dispose()
     }
+
     update() {
         this._inNavbar = this._detectNavbar(), this._popper && this._popper.update()
     }
+
     _completeHide(t) {
         if (!l.trigger(this._element, Oo, t).defaultPrevented) {
             if ("ontouchstart" in document.documentElement)
@@ -2285,10 +2401,12 @@ class q extends Y {
             this._popper && this._popper.destroy(), this._menu.classList.remove(wt), this._element.classList.remove(wt), this._element.setAttribute("aria-expanded", "false"), X.removeDataAttribute(this._menu, "popper"), l.trigger(this._element, So, t)
         }
     }
+
     _getConfig(t) {
         if (t = super._getConfig(t), typeof t.reference == "object" && !G(t.reference) && typeof t.reference.getBoundingClientRect != "function") throw new TypeError(`${Ps.toUpperCase()}: Option "reference" provided type "object" without a required "getBoundingClientRect" method.`);
         return t
     }
+
     _createPopper() {
         if (typeof Nn > "u") throw new TypeError("Bootstrap's dropdowns require Popper (https://popper.js.org)");
         let t = this._element;
@@ -2296,9 +2414,11 @@ class q extends Y {
         const e = this._getPopperConfig();
         this._popper = os(t, this._menu, e)
     }
+
     _isShown() {
         return this._menu.classList.contains(wt)
     }
+
     _getPlacement() {
         const t = this._parent;
         if (t.classList.contains(Io)) return Ko;
@@ -2308,15 +2428,18 @@ class q extends Y {
         const e = getComputedStyle(this._menu).getPropertyValue("--bs-position").trim() === "end";
         return t.classList.contains(Lo) ? e ? Bo : Wo : e ? jo : Fo
     }
+
     _detectNavbar() {
         return this._element.closest(ko) !== null
     }
+
     _getOffset() {
         const {
             offset: t
         } = this._config;
         return typeof t == "string" ? t.split(",").map(e => Number.parseInt(e, 10)) : typeof t == "function" ? e => t(e, this._element) : t
     }
+
     _getPopperConfig() {
         const t = {
             placement: this._getPlacement(),
@@ -2340,6 +2463,7 @@ class q extends Y {
             ...x(this._config.popperConfig, [t])
         }
     }
+
     _selectMenuItem({
                         key: t,
                         target: e
@@ -2347,8 +2471,9 @@ class q extends Y {
         const n = _.find(Ho, this._menu).filter(i => xt(i));
         n.length && as(n, e, t === Ms, !n.includes(e)).focus()
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = q.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (typeof e[t] > "u") throw new TypeError(`No method named "${t}"`);
@@ -2356,6 +2481,7 @@ class q extends Y {
             }
         })
     }
+
     static clearMenus(t) {
         if (t.button === Co || t.type === "keyup" && t.key !== xs) return;
         const e = _.find(Ro);
@@ -2371,6 +2497,7 @@ class q extends Y {
             t.type === "click" && (a.clickEvent = t), i._completeHide(a)
         }
     }
+
     static dataApiKeydownHandler(t) {
         const e = /input|textarea/i.test(t.target.tagName),
             n = t.key === To,
@@ -2386,11 +2513,12 @@ class q extends Y {
         o._isShown() && (t.stopPropagation(), o.hide(), r.focus())
     }
 }
+
 l.on(document, Un, ft, q.dataApiKeydownHandler);
 l.on(document, Un, ce, q.dataApiKeydownHandler);
 l.on(document, Yn, q.clearMenus);
 l.on(document, Do, q.clearMenus);
-l.on(document, Yn, ft, function(s) {
+l.on(document, Yn, ft, function (s) {
     s.preventDefault(), q.getOrCreateInstance(this).toggle()
 });
 F(q);
@@ -2412,19 +2540,24 @@ const qn = "backdrop",
         isVisible: "boolean",
         rootElement: "(element|string)"
     };
+
 class zn extends Ut {
     constructor(t) {
         super(), this._config = this._getConfig(t), this._isAppended = !1, this._element = null
     }
+
     static get Default() {
         return Qo
     }
+
     static get DefaultType() {
         return Zo
     }
+
     static get NAME() {
         return qn
     }
+
     show(t) {
         if (!this._config.isVisible) {
             x(t);
@@ -2436,6 +2569,7 @@ class zn extends Ut {
             x(t)
         })
     }
+
     hide(t) {
         if (!this._config.isVisible) {
             x(t);
@@ -2445,9 +2579,11 @@ class zn extends Ut {
             this.dispose(), x(t)
         })
     }
+
     dispose() {
         this._isAppended && (l.off(this._element, ks), this._element.remove(), this._isAppended = !1)
     }
+
     _getElement() {
         if (!this._element) {
             const t = document.createElement("div");
@@ -2455,9 +2591,11 @@ class zn extends Ut {
         }
         return this._element
     }
+
     _configAfterMerge(t) {
         return t.rootElement = et(t.rootElement), t
     }
+
     _append() {
         if (this._isAppended) return;
         const t = this._getElement();
@@ -2465,10 +2603,12 @@ class zn extends Ut {
             x(this._config.clickCallback)
         }), this._isAppended = !0
     }
+
     _emulateAnimation(t) {
         Pn(t, this._getElement(), this._config.isAnimated)
     }
 }
+
 const Jo = "focustrap",
     ta = "bs.focustrap",
     he = `.${ta}`,
@@ -2485,25 +2625,32 @@ const Jo = "focustrap",
         autofocus: "boolean",
         trapElement: "element"
     };
+
 class Gn extends Ut {
     constructor(t) {
         super(), this._config = this._getConfig(t), this._isActive = !1, this._lastTabNavDirection = null
     }
+
     static get Default() {
         return ra
     }
+
     static get DefaultType() {
         return oa
     }
+
     static get NAME() {
         return Jo
     }
+
     activate() {
         this._isActive || (this._config.autofocus && this._config.trapElement.focus(), l.off(document, he), l.on(document, ea, t => this._handleFocusin(t)), l.on(document, sa, t => this._handleKeydown(t)), this._isActive = !0)
     }
+
     deactivate() {
         this._isActive && (this._isActive = !1, l.off(document, he))
     }
+
     _handleFocusin(t) {
         const {
             trapElement: e
@@ -2512,35 +2659,44 @@ class Gn extends Ut {
         const n = _.focusableChildren(e);
         n.length === 0 ? e.focus() : this._lastTabNavDirection === Vs ? n[n.length - 1].focus() : n[0].focus()
     }
+
     _handleKeydown(t) {
         t.key === na && (this._lastTabNavDirection = t.shiftKey ? Vs : ia)
     }
 }
+
 const Hs = ".fixed-top, .fixed-bottom, .is-fixed, .sticky-top",
     Ws = ".sticky-top",
     ne = "padding-right",
     Bs = "margin-right";
+
 class qe {
     constructor() {
         this._element = document.body
     }
+
     getWidth() {
         const t = document.documentElement.clientWidth;
         return Math.abs(window.innerWidth - t)
     }
+
     hide() {
         const t = this.getWidth();
         this._disableOverFlow(), this._setElementAttributes(this._element, ne, e => e + t), this._setElementAttributes(Hs, ne, e => e + t), this._setElementAttributes(Ws, Bs, e => e - t)
     }
+
     reset() {
         this._resetElementAttributes(this._element, "overflow"), this._resetElementAttributes(this._element, ne), this._resetElementAttributes(Hs, ne), this._resetElementAttributes(Ws, Bs)
     }
+
     isOverflowing() {
         return this.getWidth() > 0
     }
+
     _disableOverFlow() {
         this._saveInitialAttribute(this._element, "overflow"), this._element.style.overflow = "hidden"
     }
+
     _setElementAttributes(t, e, n) {
         const i = this.getWidth(),
             r = o => {
@@ -2551,10 +2707,12 @@ class qe {
             };
         this._applyManipulationCallback(t, r)
     }
+
     _saveInitialAttribute(t, e) {
         const n = t.style.getPropertyValue(e);
         n && X.setDataAttribute(t, e, n)
     }
+
     _resetElementAttributes(t, e) {
         const n = i => {
             const r = X.getDataAttribute(i, e);
@@ -2566,6 +2724,7 @@ class qe {
         };
         this._applyManipulationCallback(t, n)
     }
+
     _applyManipulationCallback(t, e) {
         if (G(t)) {
             e(t);
@@ -2574,6 +2733,7 @@ class qe {
         for (const n of _.find(t, this._element)) e(n)
     }
 }
+
 const aa = "modal",
     la = "bs.modal",
     B = `.${la}`,
@@ -2607,47 +2767,59 @@ const aa = "modal",
         focus: "boolean",
         keyboard: "boolean"
     };
+
 class Lt extends Y {
     constructor(t, e) {
         super(t, e), this._dialog = _.findOne(ya, this._element), this._backdrop = this._initializeBackDrop(), this._focustrap = this._initializeFocusTrap(), this._isShown = !1, this._isTransitioning = !1, this._scrollBar = new qe, this._addEventListeners()
     }
+
     static get Default() {
         return wa
     }
+
     static get DefaultType() {
         return Ca
     }
+
     static get NAME() {
         return aa
     }
+
     toggle(t) {
         return this._isShown ? this.hide() : this.show(t)
     }
+
     show(t) {
         this._isShown || this._isTransitioning || l.trigger(this._element, Qn, {
             relatedTarget: t
         }).defaultPrevented || (this._isShown = !0, this._isTransitioning = !0, this._scrollBar.hide(), document.body.classList.add(Fs), this._adjustDialog(), this._backdrop.show(() => this._showElement(t)))
     }
+
     hide() {
         !this._isShown || this._isTransitioning || l.trigger(this._element, da).defaultPrevented || (this._isShown = !1, this._isTransitioning = !0, this._focustrap.deactivate(), this._element.classList.remove(js), this._queueCallback(() => this._hideModal(), this._element, this._isAnimated()))
     }
+
     dispose() {
         l.off(window, B), l.off(this._dialog, B), this._backdrop.dispose(), this._focustrap.deactivate(), super.dispose()
     }
+
     handleUpdate() {
         this._adjustDialog()
     }
+
     _initializeBackDrop() {
         return new zn({
             isVisible: !!this._config.backdrop,
             isAnimated: this._isAnimated()
         })
     }
+
     _initializeFocusTrap() {
         return new Gn({
             trapElement: this._element
         })
     }
+
     _showElement(t) {
         document.body.contains(this._element) || document.body.append(this._element), this._element.style.display = "block", this._element.removeAttribute("aria-hidden"), this._element.setAttribute("aria-modal", !0), this._element.setAttribute("role", "dialog"), this._element.scrollTop = 0;
         const e = _.findOne(Aa, this._dialog);
@@ -2659,6 +2831,7 @@ class Lt extends Y {
         };
         this._queueCallback(n, this._dialog, this._isAnimated())
     }
+
     _addEventListeners() {
         l.on(this._element, ga, t => {
             if (t.key === ua) {
@@ -2682,14 +2855,17 @@ class Lt extends Y {
             })
         })
     }
+
     _hideModal() {
         this._element.style.display = "none", this._element.setAttribute("aria-hidden", !0), this._element.removeAttribute("aria-modal"), this._element.removeAttribute("role"), this._isTransitioning = !1, this._backdrop.hide(() => {
             document.body.classList.remove(Fs), this._resetAdjustments(), this._scrollBar.reset(), l.trigger(this._element, Xn)
         })
     }
+
     _isAnimated() {
         return this._element.classList.contains(va)
     }
+
     _triggerBackdropTransition() {
         if (l.trigger(this._element, fa).defaultPrevented) return;
         const e = this._element.scrollHeight > document.documentElement.clientHeight,
@@ -2700,6 +2876,7 @@ class Lt extends Y {
             }, this._dialog)
         }, this._dialog), this._element.focus())
     }
+
     _adjustDialog() {
         const t = this._element.scrollHeight > document.documentElement.clientHeight,
             e = this._scrollBar.getWidth(),
@@ -2713,11 +2890,13 @@ class Lt extends Y {
             this._element.style[i] = `${e}px`
         }
     }
+
     _resetAdjustments() {
         this._element.style.paddingLeft = "", this._element.style.paddingRight = ""
     }
+
     static jQueryInterface(t, e) {
-        return this.each(function() {
+        return this.each(function () {
             const n = Lt.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (typeof n[t] > "u") throw new TypeError(`No method named "${t}"`);
@@ -2726,7 +2905,8 @@ class Lt extends Y {
         })
     }
 }
-l.on(document, Ea, Ta, function(s) {
+
+l.on(document, Ea, Ta, function (s) {
     const t = _.getElementFromSelector(this);
     ["A", "AREA"].includes(this.tagName) && s.preventDefault(), l.one(t, Qn, i => {
         i.defaultPrevented || l.one(t, Xn, () => {
@@ -2768,22 +2948,28 @@ const Oa = "offcanvas",
         keyboard: "boolean",
         scroll: "boolean"
     };
+
 class nt extends Y {
     constructor(t, e) {
         super(t, e), this._isShown = !1, this._backdrop = this._initializeBackDrop(), this._focustrap = this._initializeFocusTrap(), this._addEventListeners()
     }
+
     static get Default() {
         return Va
     }
+
     static get DefaultType() {
         return Ha
     }
+
     static get NAME() {
         return Oa
     }
+
     toggle(t) {
         return this._isShown ? this.hide() : this.show(t)
     }
+
     show(t) {
         if (this._isShown || l.trigger(this._element, La, {
             relatedTarget: t
@@ -2796,6 +2982,7 @@ class nt extends Y {
         };
         this._queueCallback(n, this._element, !0)
     }
+
     hide() {
         if (!this._isShown || l.trigger(this._element, Pa).defaultPrevented) return;
         this._focustrap.deactivate(), this._element.blur(), this._isShown = !1, this._element.classList.add(Us), this._backdrop.hide();
@@ -2804,9 +2991,11 @@ class nt extends Y {
         };
         this._queueCallback(e, this._element, !0)
     }
+
     dispose() {
         this._backdrop.dispose(), this._focustrap.deactivate(), super.dispose()
     }
+
     _initializeBackDrop() {
         const t = () => {
                 if (this._config.backdrop === "static") {
@@ -2824,11 +3013,13 @@ class nt extends Y {
             clickCallback: e ? t : null
         })
     }
+
     _initializeFocusTrap() {
         return new Gn({
             trapElement: this._element
         })
     }
+
     _addEventListeners() {
         l.on(this._element, Ra, t => {
             if (t.key === $a) {
@@ -2840,8 +3031,9 @@ class nt extends Y {
             }
         })
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = nt.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (e[t] === void 0 || t.startsWith("_") || t === "constructor") throw new TypeError(`No method named "${t}"`);
@@ -2850,7 +3042,8 @@ class nt extends Y {
         })
     }
 }
-l.on(document, Ma, ka, function(s) {
+
+l.on(document, Ma, ka, function (s) {
     const t = _.getElementFromSelector(this);
     if (["A", "AREA"].includes(this.tagName) && s.preventDefault(), st(this)) return;
     l.one(t, ti, () => {
@@ -2924,6 +3117,7 @@ function Ka(s, t, e) {
     }
     return i.body.innerHTML
 }
+
 const Ya = "TemplateFactory",
     Ua = {
         allowList: ei,
@@ -2947,31 +3141,39 @@ const Ya = "TemplateFactory",
         entry: "(string|element|function|null)",
         selector: "(string|element)"
     };
+
 class Ga extends Ut {
     constructor(t) {
         super(), this._config = this._getConfig(t)
     }
+
     static get Default() {
         return Ua
     }
+
     static get DefaultType() {
         return qa
     }
+
     static get NAME() {
         return Ya
     }
+
     getContent() {
         return Object.values(this._config.content).map(t => this._resolvePossibleFunction(t)).filter(Boolean)
     }
+
     hasContent() {
         return this.getContent().length > 0
     }
+
     changeContent(t) {
         return this._checkContent(t), this._config.content = {
             ...this._config.content,
             ...t
         }, this
     }
+
     toHtml() {
         const t = document.createElement("div");
         t.innerHTML = this._maybeSanitize(this._config.template);
@@ -2980,15 +3182,18 @@ class Ga extends Ut {
             n = this._resolvePossibleFunction(this._config.extraClass);
         return n && e.classList.add(...n.split(" ")), e
     }
+
     _typeCheckConfig(t) {
         super._typeCheckConfig(t), this._checkContent(t.content)
     }
+
     _checkContent(t) {
         for (const [e, n] of Object.entries(t)) super._typeCheckConfig({
             selector: e,
             entry: n
         }, za)
     }
+
     _setContent(t, e, n) {
         const i = _.findOne(n, t);
         if (i) {
@@ -3007,12 +3212,15 @@ class Ga extends Ut {
             i.textContent = e
         }
     }
+
     _maybeSanitize(t) {
         return this._config.sanitize ? Ka(t, this._config.allowList, this._config.sanitizeFn) : t
     }
+
     _resolvePossibleFunction(t) {
         return x(t, [this])
     }
+
     _putElementInTemplate(t, e) {
         if (this._config.html) {
             e.innerHTML = "", e.append(t);
@@ -3021,6 +3229,7 @@ class Ga extends Ut {
         e.textContent = t.textContent
     }
 }
+
 const Xa = "tooltip",
     Qa = new Set(["sanitize", "allowList", "sanitizeFn"]),
     xe = "fade",
@@ -3088,29 +3297,37 @@ const Xa = "tooltip",
         title: "(string|element|function)",
         trigger: "string"
     };
+
 class Rt extends Y {
     constructor(t, e) {
         if (typeof Nn > "u") throw new TypeError("Bootstrap's tooltips require Popper (https://popper.js.org)");
         super(t, e), this._isEnabled = !0, this._timeout = 0, this._isHovered = null, this._activeTrigger = {}, this._popper = null, this._templateFactory = null, this._newContent = null, this.tip = null, this._setListeners(), this._config.selector || this._fixTitle()
     }
+
     static get Default() {
         return hl
     }
+
     static get DefaultType() {
         return pl
     }
+
     static get NAME() {
         return Xa
     }
+
     enable() {
         this._isEnabled = !0
     }
+
     disable() {
         this._isEnabled = !1
     }
+
     toggleEnabled() {
         this._isEnabled = !this._isEnabled
     }
+
     toggle() {
         if (this._isEnabled) {
             if (this._activeTrigger.click = !this._activeTrigger.click, this._isShown()) {
@@ -3120,9 +3337,11 @@ class Rt extends Y {
             this._enter()
         }
     }
+
     dispose() {
         clearTimeout(this._timeout), l.off(this._element.closest(zs), Gs, this._hideModalHandler), this._element.getAttribute("data-bs-original-title") && this._element.setAttribute("title", this._element.getAttribute("data-bs-original-title")), this._disposePopper(), super.dispose()
     }
+
     show() {
         if (this._element.style.display === "none") throw new Error("Please use show on visible elements");
         if (!(this._isWithContent() && this._isEnabled)) return;
@@ -3142,6 +3361,7 @@ class Rt extends Y {
         };
         this._queueCallback(o, this.tip, this._isAnimated())
     }
+
     hide() {
         if (!this._isShown() || l.trigger(this._element, this.constructor.eventName(sl)).defaultPrevented) return;
         if (this._getTipElement().classList.remove(ie), "ontouchstart" in document.documentElement)
@@ -3152,15 +3372,19 @@ class Rt extends Y {
         };
         this._queueCallback(n, this.tip, this._isAnimated())
     }
+
     update() {
         this._popper && this._popper.update()
     }
+
     _isWithContent() {
         return !!this._getTitle()
     }
+
     _getTipElement() {
         return this.tip || (this.tip = this._createTipElement(this._newContent || this._getContentForTemplate())), this.tip
     }
+
     _createTipElement(t) {
         const e = this._getTemplateFactory(t).toHtml();
         if (!e) return null;
@@ -3168,9 +3392,11 @@ class Rt extends Y {
         const n = Ji(this.constructor.NAME).toString();
         return e.setAttribute("id", n), this._isAnimated() && e.classList.add(xe), e
     }
+
     setContent(t) {
         this._newContent = t, this._isShown() && (this._disposePopper(), this.show())
     }
+
     _getTemplateFactory(t) {
         return this._templateFactory ? this._templateFactory.changeContent(t) : this._templateFactory = new Ga({
             ...this._config,
@@ -3178,37 +3404,46 @@ class Rt extends Y {
             extraClass: this._resolvePossibleFunction(this._config.customClass)
         }), this._templateFactory
     }
+
     _getContentForTemplate() {
         return {
             [Ja]: this._getTitle()
         }
     }
+
     _getTitle() {
         return this._resolvePossibleFunction(this._config.title) || this._element.getAttribute("data-bs-original-title")
     }
+
     _initializeOnDelegatedTarget(t) {
         return this.constructor.getOrCreateInstance(t.delegateTarget, this._getDelegateConfig())
     }
+
     _isAnimated() {
         return this._config.animation || this.tip && this.tip.classList.contains(xe)
     }
+
     _isShown() {
         return this.tip && this.tip.classList.contains(ie)
     }
+
     _createPopper(t) {
         const e = x(this._config.placement, [this, t, this._element]),
             n = fl[e.toUpperCase()];
         return os(this._element, t, this._getPopperConfig(n))
     }
+
     _getOffset() {
         const {
             offset: t
         } = this._config;
         return typeof t == "string" ? t.split(",").map(e => Number.parseInt(e, 10)) : typeof t == "function" ? e => t(e, this._element) : t
     }
+
     _resolvePossibleFunction(t) {
         return x(t, [this._element])
     }
+
     _getPopperConfig(t) {
         const e = {
             placement: t,
@@ -3246,6 +3481,7 @@ class Rt extends Y {
             ...x(this._config.popperConfig, [e])
         }
     }
+
     _setListeners() {
         const t = this._config.trigger.split(" ");
         for (const e of t)
@@ -3267,10 +3503,12 @@ class Rt extends Y {
             this._element && this.hide()
         }, l.on(this._element.closest(zs), Gs, this._hideModalHandler)
     }
+
     _fixTitle() {
         const t = this._element.getAttribute("title");
         t && (!this._element.getAttribute("aria-label") && !this._element.textContent.trim() && this._element.setAttribute("aria-label", t), this._element.setAttribute("data-bs-original-title", t), this._element.removeAttribute("title"))
     }
+
     _enter() {
         if (this._isShown() || this._isHovered) {
             this._isHovered = !0;
@@ -3280,17 +3518,21 @@ class Rt extends Y {
             this._isHovered && this.show()
         }, this._config.delay.show)
     }
+
     _leave() {
         this._isWithActiveTrigger() || (this._isHovered = !1, this._setTimeout(() => {
             this._isHovered || this.hide()
         }, this._config.delay.hide))
     }
+
     _setTimeout(t, e) {
         clearTimeout(this._timeout), this._timeout = setTimeout(t, e)
     }
+
     _isWithActiveTrigger() {
         return Object.values(this._activeTrigger).includes(!0)
     }
+
     _getConfig(t) {
         const e = X.getDataAttributes(this._element);
         for (const n of Object.keys(e)) Qa.has(n) && delete e[n];
@@ -3299,22 +3541,26 @@ class Rt extends Y {
             ...typeof t == "object" && t ? t : {}
         }, t = this._mergeConfigObj(t), t = this._configAfterMerge(t), this._typeCheckConfig(t), t
     }
+
     _configAfterMerge(t) {
         return t.container = t.container === !1 ? document.body : et(t.container), typeof t.delay == "number" && (t.delay = {
             show: t.delay,
             hide: t.delay
         }), typeof t.title == "number" && (t.title = t.title.toString()), typeof t.content == "number" && (t.content = t.content.toString()), t
     }
+
     _getDelegateConfig() {
         const t = {};
         for (const [e, n] of Object.entries(this._config)) this.constructor.Default[e] !== n && (t[e] = n);
         return t.selector = !1, t.trigger = "manual", t
     }
+
     _disposePopper() {
         this._popper && (this._popper.destroy(), this._popper = null), this.tip && (this.tip.remove(), this.tip = null)
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = Rt.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (typeof e[t] > "u") throw new TypeError(`No method named "${t}"`);
@@ -3323,6 +3569,7 @@ class Rt extends Y {
         })
     }
 }
+
 F(Rt);
 const _l = "popover",
     ml = ".popover-header",
@@ -3339,30 +3586,37 @@ const _l = "popover",
         ...Rt.DefaultType,
         content: "(null|string|element|function)"
     };
+
 class us extends Rt {
     static get Default() {
         return El
     }
+
     static get DefaultType() {
         return vl
     }
+
     static get NAME() {
         return _l
     }
+
     _isWithContent() {
         return this._getTitle() || this._getContent()
     }
+
     _getContentForTemplate() {
         return {
             [ml]: this._getTitle(),
             [gl]: this._getContent()
         }
     }
+
     _getContent() {
         return this._resolvePossibleFunction(this._config.content)
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = us.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (typeof e[t] > "u") throw new TypeError(`No method named "${t}"`);
@@ -3371,6 +3625,7 @@ class us extends Rt {
         })
     }
 }
+
 F(us);
 const bl = "scrollspy",
     yl = "bs.scrollspy",
@@ -3404,6 +3659,7 @@ const bl = "scrollspy",
         target: "element",
         threshold: "array"
     };
+
 class be extends Y {
     constructor(t, e) {
         super(t, e), this._targetLinks = new Map, this._observableSections = new Map, this._rootElement = getComputedStyle(this._element).overflowY === "visible" ? null : this._element, this._activeTarget = null, this._observer = null, this._previousScrollData = {
@@ -3411,25 +3667,32 @@ class be extends Y {
             parentScrollTop: 0
         }, this.refresh()
     }
+
     static get Default() {
         return Pl
     }
+
     static get DefaultType() {
         return xl
     }
+
     static get NAME() {
         return bl
     }
+
     refresh() {
         this._initializeTargetsAndObservables(), this._maybeEnableSmoothScroll(), this._observer ? this._observer.disconnect() : this._observer = this._getNewObserver();
         for (const t of this._observableSections.values()) this._observer.observe(t)
     }
+
     dispose() {
         this._observer.disconnect(), super.dispose()
     }
+
     _configAfterMerge(t) {
         return t.target = et(t.target) || document.body, t.rootMargin = t.offset ? `${t.offset}px 0px -30%` : t.rootMargin, typeof t.threshold == "string" && (t.threshold = t.threshold.split(",").map(e => Number.parseFloat(e))), t
     }
+
     _maybeEnableSmoothScroll() {
         this._config.smoothScroll && (l.off(this._config.target, Xs), l.on(this._config.target, Xs, Re, t => {
             const e = this._observableSections.get(t.target.hash);
@@ -3448,6 +3711,7 @@ class be extends Y {
             }
         }))
     }
+
     _getNewObserver() {
         const t = {
             root: this._rootElement,
@@ -3456,6 +3720,7 @@ class be extends Y {
         };
         return new IntersectionObserver(e => this._observerCallback(e), t)
     }
+
     _observerCallback(t) {
         const e = o => this._targetLinks.get(`#${o.target.id}`),
             n = o => {
@@ -3473,9 +3738,11 @@ class be extends Y {
             if (r && a) {
                 if (n(o), !i) return;
                 continue
-            }!r && !a && n(o)
+            }
+            !r && !a && n(o)
         }
     }
+
     _initializeTargetsAndObservables() {
         this._targetLinks = new Map, this._observableSections = new Map;
         const t = _.find(Re, this._config.target);
@@ -3485,11 +3752,13 @@ class be extends Y {
             xt(n) && (this._targetLinks.set(decodeURI(e.hash), e), this._observableSections.set(e.hash, n))
         }
     }
+
     _process(t) {
         this._activeTarget !== t && (this._clearActiveClass(this._config.target), this._activeTarget = t, t.classList.add(yt), this._activateParents(t), l.trigger(this._element, Tl, {
             relatedTarget: t
         }))
     }
+
     _activateParents(t) {
         if (t.classList.contains(Cl)) {
             _.findOne(Il, t.closest(Ll)).classList.add(yt);
@@ -3498,13 +3767,15 @@ class be extends Y {
         for (const e of _.parents(t, Sl))
             for (const n of _.prev(e, Dl)) n.classList.add(yt)
     }
+
     _clearActiveClass(t) {
         t.classList.remove(yt);
         const e = _.find(`${Re}.${yt}`, t);
         for (const n of e) n.classList.remove(yt)
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = be.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (e[t] === void 0 || t.startsWith("_") || t === "constructor") throw new TypeError(`No method named "${t}"`);
@@ -3513,6 +3784,7 @@ class be extends Y {
         })
     }
 }
+
 l.on(window, wl, () => {
     for (const s of _.find(Ol)) be.getOrCreateInstance(s)
 });
@@ -3546,13 +3818,16 @@ const Ml = "tab",
     ni = '[data-bs-toggle="tab"], [data-bs-toggle="pill"], [data-bs-toggle="list"]',
     We = `${Xl}, ${ni}`,
     Ql = `.${ht}[data-bs-toggle="tab"], .${ht}[data-bs-toggle="pill"], .${ht}[data-bs-toggle="list"]`;
+
 class It extends Y {
     constructor(t) {
         super(t), this._parent = this._element.closest(zl), this._parent && (this._setInitialAttributes(this._parent, this._getChildren()), l.on(this._element, Fl, e => this._keydown(e)))
     }
+
     static get NAME() {
         return Ml
     }
+
     show() {
         const t = this._element;
         if (this._elemIsActive(t)) return;
@@ -3564,6 +3839,7 @@ class It extends Y {
             relatedTarget: e
         }).defaultPrevented || n && n.defaultPrevented || (this._deactivate(e, t), this._activate(t, e))
     }
+
     _activate(t, e) {
         if (!t) return;
         t.classList.add(ht), this._activate(_.getElementFromSelector(t));
@@ -3578,6 +3854,7 @@ class It extends Y {
         };
         this._queueCallback(n, t, t.classList.contains(en))
     }
+
     _deactivate(t, e) {
         if (!t) return;
         t.classList.remove(ht), t.blur(), this._deactivate(_.getElementFromSelector(t));
@@ -3592,6 +3869,7 @@ class It extends Y {
         };
         this._queueCallback(n, t, t.classList.contains(en))
     }
+
     _keydown(t) {
         if (![Kl, Zs, Yl, Js, ke, tn].includes(t.key)) return;
         t.stopPropagation(), t.preventDefault();
@@ -3606,26 +3884,32 @@ class It extends Y {
             preventScroll: !0
         }), It.getOrCreateInstance(n).show())
     }
+
     _getChildren() {
         return _.find(We, this._parent)
     }
+
     _getActiveElem() {
         return this._getChildren().find(t => this._elemIsActive(t)) || null
     }
+
     _setInitialAttributes(t, e) {
         this._setAttributeIfNotExists(t, "role", "tablist");
         for (const n of e) this._setInitialAttributesOnChild(n)
     }
+
     _setInitialAttributesOnChild(t) {
         t = this._getInnerElement(t);
         const e = this._elemIsActive(t),
             n = this._getOuterElement(t);
         t.setAttribute("aria-selected", e), n !== t && this._setAttributeIfNotExists(n, "role", "presentation"), e || t.setAttribute("tabindex", "-1"), this._setAttributeIfNotExists(t, "role", "tab"), this._setInitialAttributesOnTargetPanel(t)
     }
+
     _setInitialAttributesOnTargetPanel(t) {
         const e = _.getElementFromSelector(t);
         e && (this._setAttributeIfNotExists(e, "role", "tabpanel"), t.id && this._setAttributeIfNotExists(e, "aria-labelledby", `${t.id}`))
     }
+
     _toggleDropDown(t, e) {
         const n = this._getOuterElement(t);
         if (!n.classList.contains(Ul)) return;
@@ -3635,20 +3919,25 @@ class It extends Y {
         };
         i(si, ht), i(ql, Ve), n.setAttribute("aria-expanded", e)
     }
+
     _setAttributeIfNotExists(t, e, n) {
         t.hasAttribute(e) || t.setAttribute(e, n)
     }
+
     _elemIsActive(t) {
         return t.classList.contains(ht)
     }
+
     _getInnerElement(t) {
         return t.matches(We) ? t : _.findOne(We, t)
     }
+
     _getOuterElement(t) {
         return t.closest(Gl) || t
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = It.getOrCreateInstance(this);
             if (typeof t == "string") {
                 if (e[t] === void 0 || t.startsWith("_") || t === "constructor") throw new TypeError(`No method named "${t}"`);
@@ -3657,7 +3946,8 @@ class It extends Y {
         })
     }
 }
-l.on(document, Bl, ni, function(s) {
+
+l.on(document, Bl, ni, function (s) {
     ["A", "AREA"].includes(this.tagName) && s.preventDefault(), !st(this) && It.getOrCreateInstance(this).show()
 });
 l.on(window, jl, () => {
@@ -3689,19 +3979,24 @@ const Zl = "toast",
         autohide: !0,
         delay: 5e3
     };
+
 class ye extends Y {
     constructor(t, e) {
         super(t, e), this._timeout = null, this._hasMouseInteraction = !1, this._hasKeyboardInteraction = !1, this._setListeners()
     }
+
     static get Default() {
         return uc
     }
+
     static get DefaultType() {
         return cc
     }
+
     static get NAME() {
         return Zl
     }
+
     show() {
         if (l.trigger(this._element, oc).defaultPrevented) return;
         this._clearTimeout(), this._config.animation && this._element.classList.add(lc);
@@ -3710,6 +4005,7 @@ class ye extends Y {
         };
         this._element.classList.remove(sn), Yt(this._element), this._element.classList.add(re, oe), this._queueCallback(e, this._element, this._config.animation)
     }
+
     hide() {
         if (!this.isShown() || l.trigger(this._element, ic).defaultPrevented) return;
         const e = () => {
@@ -3717,17 +4013,21 @@ class ye extends Y {
         };
         this._element.classList.add(oe), this._queueCallback(e, this._element, this._config.animation)
     }
+
     dispose() {
         this._clearTimeout(), this.isShown() && this._element.classList.remove(re), super.dispose()
     }
+
     isShown() {
         return this._element.classList.contains(re)
     }
+
     _maybeScheduleHide() {
         this._config.autohide && (this._hasMouseInteraction || this._hasKeyboardInteraction || (this._timeout = setTimeout(() => {
             this.hide()
         }, this._config.delay)))
     }
+
     _onInteraction(t, e) {
         switch (t.type) {
             case "mouseover":
@@ -3748,14 +4048,17 @@ class ye extends Y {
         const n = t.relatedTarget;
         this._element === n || this._element.contains(n) || this._maybeScheduleHide()
     }
+
     _setListeners() {
         l.on(this._element, tc, t => this._onInteraction(t, !0)), l.on(this._element, ec, t => this._onInteraction(t, !1)), l.on(this._element, sc, t => this._onInteraction(t, !0)), l.on(this._element, nc, t => this._onInteraction(t, !1))
     }
+
     _clearTimeout() {
         clearTimeout(this._timeout), this._timeout = null
     }
+
     static jQueryInterface(t) {
-        return this.each(function() {
+        return this.each(function () {
             const e = ye.getOrCreateInstance(this, t);
             if (typeof t == "string") {
                 if (typeof e[t] > "u") throw new TypeError(`No method named "${t}"`);
@@ -3764,13 +4067,14 @@ class ye extends Y {
         })
     }
 }
+
 ge(ye);
 F(ye);
-$(document).ready(function() {
+$(document).ready(function () {
     var s = document.getElementsByClassName("story__slider"),
         t = 0,
         e = 0;
-    $("#videoModal").on("show.bs.modal", function(m) {
+    $("#videoModal").on("show.bs.modal", function (m) {
         document.querySelectorAll(".story__slide video").forEach(g => {
             $(g).parent(".story__slide").attr("data-swiper-autoplay", g.duration * 1e3)
         }), s = new Swiper(".story__slider", {
@@ -3788,7 +4092,7 @@ $(document).ready(function() {
             },
             pagination: {
                 el: ".story__pagination",
-                renderBullet: function(g, f) {
+                renderBullet: function (g, f) {
                     return '<div class="' + f + '"><div class="swiper-pagination-progress"></div> </div>'
                 }
             },
@@ -3816,7 +4120,7 @@ $(document).ready(function() {
                 }
             }
         }), s.init()
-    }), $("#videoModal").on("hidden.bs.modal", function(m) {
+    }), $("#videoModal").on("hidden.bs.modal1", function (m) {
         s && s.destroy(), $("#userComment").val(""), $(".story__modal").removeClass("full-height-popup"), $(".story__prev").removeClass("active-popup"), $(".story__next").removeClass("active-popup"), $(".story__product-popup-cta").addClass("active"), $(".story__product-popup").addClass("active"), E()
     });
 
@@ -3851,37 +4155,38 @@ $(document).ready(function() {
     function u() {
         $(".search__bar-wrapper").removeClass("active"), $(".search-icon").removeClass("hide")
     }
-    $(".link-all-products").click(function() {
+
+    $(".link-all-products").click(function () {
         n()
-    }), $(".products__landing .back-link").click(function() {
+    }), $(".products__landing .back-link").click(function () {
         i()
-    }), $(".open-landing-product").click(function() {
+    }), $(".open-landing-product").click(function () {
         r()
-    }), $(".products__single .back-link").click(function() {
+    }), $(".products__single .back-link").click(function () {
         o()
-    }), $(".products__wrapper-stacked").click(function() {
+    }), $(".products__wrapper-stacked").click(function () {
         a()
-    }), $(".products__single .back-link").click(function() {
+    }), $(".products__single .back-link").click(function () {
         c(), n()
-    }), $(".search-icon").click(function() {
+    }), $(".search-icon").click(function () {
         d()
-    }), $(".btn-search-close").click(function() {
+    }), $(".btn-search-close").click(function () {
         u(), $(".search-input").val("")
     }),
-        function() {
+        function () {
             var m = $(".qty-input");
             if (m.length) {
                 var h = m.find(".product-qty"),
                     g = m.find(".qty-count"),
                     f = parseInt(h.attr("min")),
                     v = parseInt(h.attr("max"));
-                h.change(function() {
+                h.change(function () {
                     var b = $(this),
                         y = b.siblings(".qty-count--minus"),
                         A = b.siblings(".qty-count--add"),
                         p = parseInt(b.val());
                     isNaN(p) || p <= f ? (b.val(f), y.attr("disabled", !0)) : (y.attr("disabled", !1), p >= v ? (b.val(v), A.attr("disabled", !0)) : (b.val(p), A.attr("disabled", !1)))
-                }), g.click(function() {
+                }), g.click(function () {
                     var b = this.dataset.action,
                         y = $(this),
                         A = y.siblings(".product-qty"),
@@ -3896,13 +4201,14 @@ $(document).ready(function() {
             h.currentTime = t, h.play()
         }), s && (e = s.activeIndex, s.slideTo(e), s.autoplay.start()), $(".story__modal").removeClass("full-height-popup"), $(".story__prev").removeClass("active-popup"), $(".story__next").removeClass("active-popup")
     }
-    $(".open-popup").on("click", function(m) {
+
+    $(".open-popup").on("click", function (m) {
         m.preventDefault(), $(this).hasClass("open-popup-h-full") ? $(".story__modal").addClass("full-height-popup") : $(".story__modal").removeClass("full-height-popup"), $(".story-popup").fadeIn(300), s && s.autoplay && s.autoplay.stop(), document.querySelectorAll(".story__slide video").forEach((g, f) => {
             g.paused || (t = g.currentTime), g.pause(), g.currentTime = t
         }), $(".story__prev").addClass("active-popup"), $(".story__next").addClass("active-popup")
-    }), $(".story-popup__close").on("click", function() {
+    }), $(".story-popup__close").on("click", function () {
         E()
-    }), $(".story__product-popup-cta").on("click", function() {
+    }), $(".story__product-popup-cta").on("click", function () {
         $(this).toggleClass("active"), $(this).next(".story__product-popup").toggleClass("active")
     })
 });
