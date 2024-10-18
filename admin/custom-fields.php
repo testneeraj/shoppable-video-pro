@@ -4,6 +4,7 @@ function svp_enqueue_color_picker($hook_suffix)
 {
     wp_enqueue_style('wp-color-picker');
     wp_enqueue_script('svp-color-picker-script', plugin_dir_url(__FILE__) . 'svp-color-picker-script.js', array('wp-color-picker'), false, true);
+    wp_enqueue_editor();
 }
 
 add_action('admin_enqueue_scripts', 'svp_enqueue_color_picker');
@@ -95,6 +96,7 @@ function svp_cta_details_callback($post)
     wp_nonce_field(basename(__FILE__), 'svp_cta_nonce');
     $ctas = get_post_meta($post->ID, '_svp_ctas', true);
     $pop_ups = get_post_meta($post->ID, '_svp_pop_ups', true);
+    $product_popups = get_post_meta($post->ID, '_svp_product_popups', true);
     echo '<div class="svp-meta-box-container">';
     echo '<ul id="svp_cta_list">';
     if (!empty($ctas)) {
@@ -167,6 +169,51 @@ function svp_cta_details_callback($post)
     echo '</ul>';
     echo '<button type="button" id="add_popup_button" class="button">Add Info Popup</button>';
     echo '</div>';
+
+    echo '<div class="svp-meta-box-container">';
+    echo '<ul id="svp_product_popup_list">';
+    if (!empty($product_popups)) {
+        foreach ($product_popups as $index => $popup) {
+            echo '<li>';
+
+            // Product Image Upload
+            $image_url = !empty($popup['image_url']) ? esc_url($popup['image_url']) : '';
+            echo '<div class="product-image-upload">';
+            echo '<img src="' . $image_url . '" class="product-image-preview" style="max-width: 100px; display: ' . ($image_url ? 'block' : 'none') . ';" />';
+            echo '<input type="hidden" name="svp_product_popups[' . $index . '][image_url]" value="' . $image_url . '" class="product-image-url" />';
+            echo '<button type="button" class="upload-product-image button">' . ($image_url ? 'Change Image' : 'Upload Image') . '</button>';
+            echo '</div>';
+
+            // Title
+            echo '<input type="text" name="svp_product_popups[' . $index . '][title]" placeholder="Product Title" value="' . esc_attr($popup['title']) . '" />';
+
+            // Selling Price
+            echo '<input type="text" name="svp_product_popups[' . $index . '][selling_price]" placeholder="Selling Price" value="' . esc_attr($popup['selling_price']) . '" />';
+
+            // Offer Price
+            echo '<input type="text" name="svp_product_popups[' . $index . '][offer_price]" placeholder="Offer Price" value="' . esc_attr($popup['offer_price']) . '" />';
+
+            // Button Text
+            echo '<input type="text" name="svp_product_popups[' . $index . '][button_text]" placeholder="Button Text" value="' . esc_attr($popup['button_text']) . '" />';
+
+            // Button Link
+            echo '<input type="url" name="svp_product_popups[' . $index . '][button_link]" placeholder="Button Link" value="' . esc_url($popup['button_link']) . '" />';
+
+            // Open in New Tab Checkbox
+            echo '<p><label><input type="checkbox" name="svp_product_popups[' . $index . '][open_in_new_tab]" ' . checked($popup['open_in_new_tab'], 'on', false) . ' /> Open in New Tab</label></p>';
+
+            // Remove Button
+            echo '<button class="remove-product-popup button">Remove</button>';
+
+            echo '</li>';
+        }
+    }
+
+    echo '</ul>';
+
+// Add New Product Popup Button
+    echo '<button type="button" id="add_product_popup_button" class="button">Add Product Popup</button>';
+    echo '</div>';
 }
 
 function svp_statistics_details_callback($post)
@@ -230,6 +277,30 @@ function svp_save_meta_boxes($post_id)
         update_post_meta($post_id, '_svp_pop_ups', $popups);
     } else {
         delete_post_meta($post_id, '_svp_pop_ups');
+    }
+
+    // Save the Product Popups
+    if (isset($_POST['svp_product_popups'])) {
+        $product_popups = array_map(function ($product_popup) {
+            return [
+                'image_url' => sanitize_text_field($product_popup['image_url']),
+                'title' => sanitize_text_field($product_popup['title']),
+                'selling_price' => sanitize_text_field($product_popup['selling_price']),
+                'offer_price' => sanitize_text_field($product_popup['offer_price']),
+                'button_text' => sanitize_text_field($product_popup['button_text']),
+                'button_link' => esc_url_raw($product_popup['button_link']),
+                'open_in_new_tab' => isset($product_popup['open_in_new_tab']) ? 'on' : 'off',
+            ];
+        }, $_POST['svp_product_popups']);
+
+        // Debug: Check if product popups are being processed correctly
+        error_log(print_r($product_popups, true)); // Add this line for debugging
+
+        // Update the post meta with the processed product popups
+        update_post_meta($post_id, '_svp_product_popups', $product_popups);
+    } else {
+        // If no product popups are set, delete the previous meta
+        delete_post_meta($post_id, '_svp_product_popups');
     }
 
 
@@ -445,11 +516,12 @@ input:checked + .slider:before {
 #svp_popup_list li div, 
 #svp_popup_list li input, 
 #svp_popup_list li select, 
-#svp_popup_list li textarea {
+#svp_popup_list li textarea,
+ .product-image-upload{
     margin-right: 10px;
 }
 
-.popup-image-upload, .popup-position-select, .popup-size-select, 
+.popup-image-upload, .popup-position-select, .popup-size-select, .product-image-upload,
 input[type="text"], textarea {
     flex: 1;
 }
@@ -457,6 +529,7 @@ input[type="text"], textarea {
 textarea {
     min-height: 100px;
     resize: vertical;
+    max-height: 200px;
 }
 
 button {
@@ -533,6 +606,7 @@ function svp_admin_scripts()
                 });
                 mediaUploader.open();
             }
+
 
             // Upload CTA icon button click
             $('#svp_cta_list').on('click', '.upload-cta-icon', function (e) {
@@ -621,7 +695,7 @@ function svp_admin_scripts()
                     '</div>' +
                     '<input type="text" name="svp_pop_ups[' + popupCount + '][title]" placeholder="Title" />' +
                     '<div>' +
-                    '<textarea name="svp_pop_ups[' + popupCount + '][content]" class="popup-content" id = "textarea_'+popupCount+'" placeholder="Content"></textarea>' +
+                    '<textarea name="svp_pop_ups[' + popupCount + '][content]" class="popup-content"  id="popup_content_' + popupCount + '" placeholder="Content"></textarea>' +
                     '</div>' +
                     '<select name="svp_pop_ups[' + popupCount + '][position]" class="popup-position-select">' +
                     '<option value="">Select Position</option>';
@@ -644,18 +718,24 @@ function svp_admin_scripts()
                     '</li>';
 
                 $('#svp_popup_list').append(newPopupHtml);
-                wp.editor.initialize(textarea_2, {
-                    tinymce: {
-                        wpautop: true,
-                        plugins: 'lists,paste,media,wordpress',
-                        toolbar1: 'bold,italic,underline,bullist,numlist,link,unlink,wp_adv',
-                        toolbar2: 'formatselect,alignleft,aligncenter,alignright,alignjustify',
-                        toolbar3: 'media',
-                    },
-                    quicktags: true,
-                    mediaButtons: true
-                })
+                initEditor('popup_content_' + popupCount);
             });
+
+            function initEditor(textareaId) {
+
+                if (typeof wp.editor !== 'undefined') {
+                    wp.editor.initialize(textareaId, {
+                        tinymce: {
+                            wpautop: true,
+                            plugins: 'lists,paste,media,wordpress',
+                            toolbar1: 'bold,italic,underline,bullist,numlist,link,unlink,wp_adv',
+                            toolbar2: 'formatselect,alignleft,aligncenter,alignright,alignjustify',
+                        },
+                        quicktags: true,
+                        mediaButtons: true
+                    });
+                }
+            }
 
             $('#svp_popup_list').on('click', '.remove-popup', function (e) {
                 e.preventDefault();
@@ -671,22 +751,57 @@ function svp_admin_scripts()
                 openMediaUploader(button, imgPreview, hiddenField);
             });
 
-            // WYSIWYG Editor Initialization
-            $('#svp_popup_list').on('focus', '.popup-content', function () {
-                var textareaId = $(this).attr('id');
-                if (!textareaId) {
-                    var randomId = 'popup_content_' + Math.random().toString(36).substr(2, 9);
-                    $(this).attr('id', randomId);
-                    wp.editor.initialize(randomId, {
-                        tinymce: {
-                            toolbar1: 'bold,italic,underline,|,bullist,numlist,|,link,unlink',
-                            toolbar2: '',
-                            toolbar3: '',
-                            menubar: false,
-                            statusbar: false,
-                        },
-                        quicktags: true,
-                    });
+            $('#add_product_popup_button').on('click', function () {
+                var productCount = $('#svp_product_popup_list li').length;
+
+                // HTML for new Product Popup
+                var newProductPopupHtml = '<li>' +
+                    '<div class="product-image-upload">' +
+                    '<img src="" class="product-image-preview" style="max-width: 100px; display: none;" />' +
+                    '<input type="hidden" name="svp_product_popups[' + productCount + '][image_url]" class="product-image-url" />' +
+                    '<button type="button" class="upload-product-image button">Upload Image</button>' +
+                    '</div>' +
+                    '<input type="text" name="svp_product_popups[' + productCount + '][title]" placeholder="Product Title" />' +
+                    '<input type="text" name="svp_product_popups[' + productCount + '][selling_price]" placeholder="Selling Price" />' +
+                    '<input type="text" name="svp_product_popups[' + productCount + '][offer_price]" placeholder="Offer Price" />' +
+                    '<input type="text" name="svp_product_popups[' + productCount + '][button_text]" placeholder="Button Text" />' +
+                    '<input type="url" name="svp_product_popups[' + productCount + '][button_link]" placeholder="Button Link" />' +
+                    '<p><label><input type="checkbox" name="svp_product_popups[' + productCount + '][open_in_new_tab]" /> Open in New Tab</label></p>' +
+                    '<button class="remove-product-popup button">Remove</button>' +
+                    '</li>';
+
+                // Append new Product Popup to the list
+                $('#svp_product_popup_list').append(newProductPopupHtml);
+            });
+
+            // Remove Product Popup
+            $('#svp_product_popup_list').on('click', '.remove-product-popup', function (e) {
+                e.preventDefault();
+                $(this).closest('li').remove();
+            });
+
+            // Handle Product Image Upload
+            $('#svp_product_popup_list').on('click', '.upload-product-image', function () {
+                var button = $(this);
+                var custom_uploader = wp.media({
+                    title: 'Choose or Upload an Image',
+                    button: {
+                        text: 'Use this image'
+                    },
+                    multiple: false
+                }).on('select', function () {
+                    var attachment = custom_uploader.state().get('selection').first().toJSON();
+                    button.siblings('.product-image-url').val(attachment.url);
+                    button.siblings('.product-image-preview').attr('src', attachment.url).show();
+                    button.text('Change Image');
+                }).open();
+            });
+
+            // Optionally handle default image preview for existing product popups
+            $('#svp_product_popup_list').find('.product-image-preview').each(function () {
+                var imageUrl = $(this).siblings('.product-image-url').val();
+                if (imageUrl) {
+                    $(this).attr('src', imageUrl).show();
                 }
             });
 

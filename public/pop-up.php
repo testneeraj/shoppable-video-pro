@@ -4,128 +4,157 @@ if (is_admin() || $GLOBALS['pagenow'] === 'wp-login.php' || $GLOBALS['pagenow'] 
 }
 ?>
 
-<!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous" referrerpolicy="no-referrer"/>
-<!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-<link rel="stylesheet" href="<?php echo SVP_PLUGIN_URL ?>public/assets/style.css"/>
-<style>
-    :root {
-        --theme-primary: #AC87C5;
-        --comment-input-bg: rgba(6, 6, 6, 0.35);
-        --input-color: #FFFFFF;
-        --font-color: #212529;
-        --white: #FFFFFF;
-        --white-50: rgba(255, 255, 255, .5);
-        --white-80: rgba(255, 255, 255, .8);
-        --cubic-transition: 500ms cubic-bezier(0.6, 0.01, 0.1, 0.96);
-    }
+<?php
+function scrips_in_footer()
+{ ?>
 
-    .action-btn-wrapper {
-        position: absolute;
-        right: 10px;
-        top: 100px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        z-index: 1;
-    }
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="<?php echo SVP_PLUGIN_URL ?>public/assets/bootstrap.min.js"></script>
+    <script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
+    <script src="<?php echo SVP_PLUGIN_URL ?>public/assets/main.js"></script>
+<?php
 
-    .action-btn-wrapper > .action-btn {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, .5);
-        -webkit-backdrop-filter: blur(10px);
-        backdrop-filter: blur(10px);
-        box-shadow: 0 4px 10px #0003;
-        color: var(--white);
-        border-radius: 50%;
-        font-size: 18px;
-        transition: .3s ease-out;
-        text-decoration: none;
-    }
+}
+add_action ( 'wp_footer', 'scrips_in_footer' );
+?>
 
-    .action-btn-wrapper > .action-btn:hover {
-        background-color: var(--white);
-        color: var(--font-color);
-        text-decoration: none;
-    }
 
-    .action-btn-wrapper > .action-btn:focus {
-        text-decoration: none;
-    }
+<?php
+function scrips_in_header()
+{ ?>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link rel="stylesheet" href="<?php echo SVP_PLUGIN_URL ?>public/assets/style.css"/>
+    <style>
+        :root {
+            --theme-primary: #AC87C5;
+            --comment-input-bg: rgba(6, 6, 6, 0.35);
+            --input-color: #FFFFFF;
+            --font-color: #212529;
+            --white: #FFFFFF;
+            --white-50: rgba(255, 255, 255, .5);
+            --white-80: rgba(255, 255, 255, .8);
+            --cubic-transition: 500ms cubic-bezier(0.6, 0.01, 0.1, 0.96);
+        }
 
-    .share-navigator {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        position: absolute;
-        top: 150px;
-        right: 0;
-        z-index: 2;
-        height: 0;
-        opacity: 0;
-        transition: height 0.3s ease, opacity 0.3s ease;
-    }
+        .action-btn-wrapper {
+            position: absolute;
+            right: 10px;
+            top: 100px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1;
+        }
 
-    .share-navigator.open {
-        height: auto;
-        opacity: 1;
-    }
+        .action-btn-wrapper > .action-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, .5);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 10px #0003;
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 18px;
+            transition: .3s ease-out;
+            text-decoration: none;
+        }
 
-    .share-btn {
-        width: 40px;
-        height: 40px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: rgba(0, 0, 0, .5);
-        color: var(--white);
-        border-radius: 50%;
-        font-size: 18px;
-        transition: .3s ease-out;
-        text-decoration: none;
-    }
+        .action-btn-wrapper > .action-btn:hover {
+            background-color: var(--white);
+            color: var(--font-color);
+            text-decoration: none;
+        }
 
-    .share-btn:hover {
-        background-color: var(--white);
-        color: var(--font-color);
-        text-decoration: none;
-    }
+        .action-btn-wrapper > .action-btn:focus {
+            text-decoration: none;
+        }
 
-    .share-btn:focus {
-        text-decoration: none;
-    }
+        .share-navigator {
+            display: none;
+            gap: 10px;
+            position: absolute;
+            top: 50%; /* Positioning the popup below the button */
+            right: 50px;
+            z-index: 2;
+            padding: 10px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
 
-    .play-button {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 40px;
-        transform: translate(-50%, -50%);
-        font-size: 18px;
-        color: var(--white);
-        background: rgba(0, 0, 0, 0.5);
-        padding: 10px;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 2;
-        display: none;
-        height: 40px;
-        align-items: center;
-        justify-content: center;
-    }
+        .share-navigator.open {
+            display: flex;
+            opacity: 1;
+        }
 
-    .fixed-video-bubble .video-bubble__wrapper {
-        z-index: 2;
-    }
+        .action-btn--share {
+            position: relative;
+        }
 
-</style>
+        .share-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, .5);
+            color: var(--white);
+            border-radius: 50%;
+            font-size: 18px;
+            transition: .3s ease-out;
+            text-decoration: none;
+        }
+
+        .share-btn:hover {
+            background-color: var(--white);
+            color: var(--font-color);
+            text-decoration: none;
+        }
+
+        .share-btn:focus {
+            text-decoration: none;
+        }
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: var(--white);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 2;
+            display: none;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fixed-video-bubble .video-bubble__wrapper {
+            z-index: 2;
+        }
+
+    </style>
+    <?php
+
+}
+add_action ( 'wp_head', 'scrips_in_header' );
+?>
+
 <?php
 $posts = get_posts([
     'post_type' => 'shoppable_video',
@@ -144,15 +173,15 @@ foreach ($posts as $post) {
 ?>
 <?php if (get_post_meta($post->ID, '_svp_background_color', true)) { ?>
     <style>
-        .video-bubble__modal .modal-header .btn-close, .video-bubble__modal .modal-cta .cta .btn-wrapper > *, .story__prev, .story__next, .story__next.swiper-button-next, .story__prev.swiper-button-prev, .story__product-card-cta a {
-            background: <?php echo get_post_meta($post->ID, '_svp_background_color', true) ?>;
+        .video-bubble__modal .modal-header .btn-close, .video-bubble__modal .modal-cta .cta .btn-wrapper > *, .story__prev, .story__next, .story__next.swiper-button-next, .story__prev.swiper-button-prev, .story__product-card-cta a, .share-btn {
+            background: <?php echo get_post_meta($post->ID, '_svp_background_color', true) ?> !important;
         }
     </style>
 <?php } ?>
 <?php if (get_post_meta($post->ID, '_svp_hover_color', true)) { ?>
     <style>
-        .video-bubble__modal .modal-header .btn-close:hover, .video-bubble__modal .modal-cta .cta .btn-wrapper > *:hover, .story__prev:not(.swiper-button-disabled):hover, .story__next:not(.swiper-button-disabled):hover, .story__next.swiper-button-next:not(.swiper-button-disabled):hover, .story__prev.swiper-button-prev:not(.swiper-button-disabled):hover, .story__product-card-cta a:hover {
-            background: <?php echo get_post_meta($post->ID, '_svp_hover_color', true) ?>;
+        .video-bubble__modal .modal-header .btn-close:hover, .video-bubble__modal .modal-cta .cta .btn-wrapper > *:hover, .story__prev:not(.swiper-button-disabled):hover, .story__next:not(.swiper-button-disabled):hover, .story__next.swiper-button-next:not(.swiper-button-disabled):hover, .story__prev.swiper-button-prev:not(.swiper-button-disabled):hover, .story__product-card-cta a:hover, .share-btn:hover {
+            background: <?php echo get_post_meta($post->ID, '_svp_hover_color', true) ?> !important;
         }
     </style>
 <?php } ?>
@@ -219,20 +248,21 @@ foreach ($posts as $post) {
                 <div class="cta cta--left">
                     <div class="btn-wrapper">
                         <?php if ($svp_pop_ups):
+                            $i = 1;
                             foreach ($svp_pop_ups as $popups):
                                 $popup_class = "";
                                 if ($popups["size"] == "fullsize") {
                                     $popup_class = "fullsize";
                                 }
                                 ?>
-                                <a href="#" class="open-popup <?= $popup_class ?>" title="Open Popup">
+                                <a href="#" class="open-popup_<?php echo $i ?> <?= $popup_class ?>" title="Open Popup">
                                     <?php if ($popups["display_as_button"] == "on"): ?>
                                       <i class="fa-solid fa-eye" ></i>
                                     <?php else: ?>
                                         <img src="<?php echo $popups["image"] ?>">
                                     <?php endif; ?>
                                 </a>
-                            <?php endforeach; endif; ?>
+                            <?php $i++; endforeach; endif; ?>
                         <?php foreach ($svp_ctas as $cta):
                             if ($cta["position"] == "cta--left"):
                                 ?>
@@ -280,10 +310,10 @@ foreach ($posts as $post) {
                     </a>
                 <?php } ?>
                 <?php if ($share == "on") { ?>
-                    <a href="#" class="action-btn action-btn--share" title="Share">
+                    <a href="#" class="action-btn action-btn--share" title="Share" id="shareButton">
                         <i class="fa-solid fa-share"></i>
                     </a>
-                    <div class="share-navigator" style="display: none;">
+                    <div class="share-navigator" id="shareNavigator">
                         <a href="#" class="share-btn share-btn--facebook" title="Share on Facebook">
                             <i class="fa-brands fa-facebook-f"></i>
                         </a>
@@ -297,7 +327,9 @@ foreach ($posts as $post) {
                 <?php } ?>
             </div>
 
-            <?php if ($svp_pop_ups): foreach ($svp_pop_ups as $popups):
+            <?php if ($svp_pop_ups):
+              $p=1;
+                foreach ($svp_pop_ups as $popups):
                 if ($popups["position"] == "popup--left"):
                     $pp_width_class = "";
                     if ($popups["size"] == "fullsize") {
@@ -305,7 +337,7 @@ foreach ($posts as $post) {
                     }
                     ?>
                     <!-- Full height Info Popup -->
-                    <div class="story-popup <?= $pp_width_class ?>">
+                    <div class="story-popup pop_up_<?= $p ?> <?= $pp_width_class ?>">
                         <div class="story-popup__content">
                             <div class="story-popup__header">
                                 <h3><?php echo $popups["title"] ?></h3>
@@ -316,7 +348,7 @@ foreach ($posts as $post) {
                             </div>
                         </div>
                     </div>
-                <?php endif; endforeach; endif; ?>
+                <?php endif; $p++; endforeach; endif; ?>
 
             <!-- Btn to toggle product popup -->
             <div class="story__product-popup-cta active">
@@ -349,137 +381,60 @@ foreach ($posts as $post) {
     </div>
     <!-- End: Slider -->
 </div>
-
-<!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<!-- Jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
-<!-- GSAP -->
-<script src="https://unpkg.co/gsap@3/dist/gsap.min.js"></script>
-<script src="<?php echo SVP_PLUGIN_URL ?>public/assets/main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+<?php if ($svp_pop_ups):
+$j = 1;
+foreach ($svp_pop_ups as $popups):
+$popup_class = "";
+if ($popups["size"] == "fullsize") {
+    $popup_class = "fullsize";
+}
+?>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Mute Button Click Handler
-        const muteButton = document.querySelector('.action-btn--mute');
-        const videos = document.querySelectorAll('video');
-        const shareButton = document.querySelector('.action-btn--share');
-        const shareNavigator = document.querySelector('.share-navigator');
-        const shareFacebook = document.querySelector('.share-btn--facebook');
-        const shareTwitter = document.querySelector('.share-btn--twitter');
-        const shareEmail = document.querySelector('.share-btn--email');
-        const videoUrl = "<?php echo get_permalink($post->ID); ?>";
+    function closeStoryPopup() {
+        $(".story-popup").fadeOut(300);
 
-        if (muteButton) {
-            muteButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                videos.forEach(video => {
-                    video.muted = !video.muted;
-                });
-                if (videos[0].muted) {
-                    muteButton.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-                } else {
-                    muteButton.innerHTML = '<i class="fa-solid fa-volume-high"></i>';
-                }
-            });
+        const videos = document.querySelectorAll(".story__slide video");
+
+        $(".story__modal").removeClass("full-height-popup");
+
+        $(".story__prev").removeClass("active-popup");
+        $(".story__next").removeClass("active-popup");
+    }
+    // Open popup
+    $(".open-popup_"+ <?php echo $j ?>).on("click", function (e) {
+        e.preventDefault();
+
+        if ($(this).hasClass("open-popup-h-full")) {
+            $(".story__modal").addClass("full-height-popup");
+        } else {
+            $(".story__modal").removeClass("full-height-popup");
         }
 
-        if (shareButton && shareNavigator) {
-            shareButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                if (!shareNavigator.classList.contains('open')) {
-                    slideDown(shareNavigator);
-                } else {
-                    slideUp(shareNavigator);
-                }
-            });
+        $(".pop_up_"+ <?php echo $j ?>).fadeIn(300);
+
+        if (slider && slider.autoplay) {
+            slider.autoplay.stop();
         }
 
-        function slideDown(element) {
-            element.style.display = 'flex';
-            const height = element.scrollHeight + 'px';
-            element.style.opacity = '0';
-            setTimeout(() => {
-                element.style.opacity = '1';
-                element.classList.add('open');
-            }, 10);
-        }
-
-        function slideUp(element) {
-            element.style.height = element.scrollHeight + 'px';
-            setTimeout(() => {
-                element.style.opacity = '0';
-                element.classList.remove('open');
-            }, 10);
-        }
-
-
-        if (shareFacebook) {
-            shareFacebook.addEventListener('click', function (e) {
-                e.preventDefault();
-                const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(videoUrl)}`;
-                window.open(facebookUrl, '_blank');
-            });
-        }
-
-        if (shareTwitter) {
-            shareTwitter.addEventListener('click', function (e) {
-                e.preventDefault();
-                const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(videoUrl)}&text=Check out this video!`;
-                window.open(twitterUrl, '_blank');
-            });
-        }
-
-        if (shareEmail) {
-            shareEmail.addEventListener('click', function (e) {
-                e.preventDefault();
-                const emailSubject = 'Check out this video';
-                const emailBody = `I thought you'd like this video: ${videoUrl}`;
-                window.location.href = `mailto:?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
-            });
-        }
-
-        document.querySelectorAll('.story__slide').forEach(slide => {
-            const video = slide.querySelector('.video-player');
-            const playButton = slide.querySelector('.play-button');
-
-            // Function to handle play/pause
-            const toggleVideo = () => {
-                if (video.paused) {
-                    document.querySelectorAll('.video-player').forEach(v => {
-                        v.pause();
-                        v.currentTime = 0;
-                    });
-                    video.play();
-                    playButton.style.display = 'none';
-                } else {
-                    video.pause();
-                    playButton.style.display = 'block';
-                }
-            };
-
-            // Click event on play button
-            playButton.addEventListener('click', toggleVideo);
-
-            // Click event on video
-            video.addEventListener('click', toggleVideo);
-
-            // Optional: Show play button again when video is paused
-            video.addEventListener('pause', () => {
-                playButton.style.display = 'flex';
-            });
-
-            // Hide play button when video is playing
-            video.addEventListener('play', () => {
-                playButton.style.display = 'none';
-            });
-            videoModal.addEventListener('hide.bs.modal', function () {
-                document.querySelectorAll('.video-player').forEach(v => {
-                    v.pause();
-                    v.currentTime = 0;
-                });
-            });
+        const videos = document.querySelectorAll(".story__slide video");
+        videos.forEach((video, index) => {
+            if (!video.paused) {
+                lastVideoTime = video.currentTime;
+            }
+            video.pause();
+            video.currentTime = lastVideoTime;
         });
+
+        $(".story__prev").addClass("active-popup");
+        $(".story__next").addClass("active-popup");
+    });
+
+    // Close popup
+    $(".story-popup__close").on("click", function () {
+        closeStoryPopup();
     });
 
 
 </script>
+<?php $j++; endforeach; endif; ?>
